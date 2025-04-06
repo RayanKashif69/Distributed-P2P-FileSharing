@@ -7,7 +7,6 @@ import random
 import uuid
 import hashlib
 import re
-import random
 import functools
 import base64
 import threading
@@ -117,6 +116,48 @@ def send_gossip(to_host, to_port):
         print(f"[{peer_id}] Failed to send GOSSIP to {to_host}:{to_port}: {e}")
 
 
+# handling GOSSIP_REPLY message I recieve from other peers
+def handle_gossip_reply(msg):
+    sender_id = msg["peerId"]
+    sender_host = msg["host"]
+    sender_port = msg["port"]
+    files = msg.get("files", [])
+
+    # 1. Update tracked_peers
+    if sender_id != peer_id:
+        if sender_id not in tracked_peers:
+            print(f"[{peer_id}] Tracking new peer from reply: {sender_id}")
+        tracked_peers[sender_id] = {
+            "host": sender_host,
+            "port": sender_port,
+            "last_seen": time.time(),
+        }
+
+    # 2. Merge metadata
+    for file in files:
+        file_id = file["file_id"]
+        if file_id not in file_metadata:
+            file_metadata[file_id] = {**file, "peers_with_file": [sender_id]}
+            print(f"[{peer_id}] Added new file {file['file_name']} from {sender_id}")
+        else:
+            # File already exists
+            existing = file_metadata[file_id]
+
+            # Update timestamp and info if newer
+            if file["file_timestamp"] > existing["file_timestamp"]:
+                print(
+                    f"[{peer_id}] Updating file {file['file_name']} to newer version from {sender_id}"
+                )
+                file_metadata[file_id].update(file)
+
+            # Always ensure the peer is listed as having this file
+            if sender_id not in file_metadata[file_id]["peers_with_file"]:
+                file_metadata[file_id]["peers_with_file"].append(sender_id)
+
+    save_metadata()
+
+
+# handling recieved GOSSIP message and replying to the GOSSIP
 def handle_gossip(msg):
     gossip_id = msg["id"]
     sender_id = msg["peerId"]
@@ -158,14 +199,16 @@ def handle_gossip(msg):
     except Exception as e:
         print(f"[{peer_id}] Failed to send GOSSIP_REPLY to {sender_id}: {e}")
 
-    # 4. Optional: forward to 3–5 random peers (excluding sender)
-    peers_to_forward = random.sample(
-        [p for p in tracked_peers if p != sender_id and p != peer_id],
-        min(GOSSIP_FANOUT, len(tracked_peers) - 1),
-    )
-    for pid in peers_to_forward:
-        pinfo = tracked_peers[pid]
-        send_gossip(pinfo["host"], pinfo["port"])
+        # 4. Optional: forward to 3–5 random peers (excluding sender and self)
+    eligible_peers = [p for p in tracked_peers if p != sender_id and p != peer_id]
+
+    if eligible_peers:
+        peers_to_forward = random.sample(
+            eligible_peers, min(GOSSIP_FANOUT, len(eligible_peers))
+        )
+        for pid in peers_to_forward:
+            pinfo = tracked_peers[pid]
+            send_gossip(pinfo["host"], pinfo["port"])
 
 
 def get_gossip_reply_metadata():
@@ -192,13 +235,17 @@ def handle_message(conn, addr, msg):
     # For example, check the type of the message
     if "type" in msg:
         if msg["type"] == "GOSSIP":
+
             # Process GOSSIP message
             print(f"[{peer_id}] Handling GOSSIP message from {msg.get('peerId')}")
             # print(f"[{peer_id}] Full GOSSIP received:\n{json.dumps(msg, indent=2)}")
             handle_gossip(msg)
+
         elif msg["type"] == "GOSSIP_REPLY":
+
             print(f"[{peer_id}] Handling GOSSIP_REPLY from {msg.get('peerId')}")
-            # Process GOSSIP_REPLY
+            handle_gossip_reply(msg)
+
         else:
             print(f"[{peer_id}] Received unknown message type: {msg['type']}")
     else:
@@ -288,11 +335,54 @@ def start_gossip_loop(well_known_host, well_known_port):
     t.start()
 
 
+# starts the cleanup thread that will run every 60 seconds
 def start_cleanup_loop():
     def loop():
         while True:
             time.sleep(DROP_PEER_TIMEOUT)  # every 60 seconds
             cleanup_tracked_peers()
+
+    t = threading.Thread(target=loop, daemon=True)
+    t.start()
+
+
+def handle_cli_command(cmd):
+    if cmd == "list":
+        print(f"[{peer_id}] Listing {len(file_metadata)} file(s):")
+        for fid, meta in file_metadata.items():
+            print("-" * 50)
+            print(f"Name      : {meta['file_name']}")
+            print(f"ID        : {meta['file_id']}")
+            print(f"Size      : {meta['file_size']} bytes")
+            print(f"Owner     : {meta['file_owner']}")
+            print(f"Timestamp : {meta['file_timestamp']}")
+            print(f"Available on peers: {', '.join(meta['peers_with_file'])}")
+        print("-" * 50)
+
+    elif cmd == "peers":
+        print(f"[{peer_id}] Currently tracking {len(tracked_peers)} peer(s):")
+        for pid, info in tracked_peers.items():
+            last_seen = int(time.time() - info["last_seen"])
+            print(
+                f"- {pid}: {info['host']}:{info['port']} (last seen {last_seen}s ago)"
+            )
+
+    else:
+        print(f"[{peer_id}] Unknown command: {cmd}")
+
+
+# start the CLI loop for user commands
+def start_cli_loop():
+
+    def loop():
+        while True:
+            try:
+                cmd = input("> ").strip()
+                handle_cli_command(cmd)
+            except EOFError:
+                break
+            except Exception as e:
+                print(f"[{peer_id}] CLI error: {e}")
 
     t = threading.Thread(target=loop, daemon=True)
     t.start()
@@ -310,8 +400,29 @@ if __name__ == "__main__":
         )
 
     # Send initial gossip
-    send_gossip("localhost", 8000)  # Use real host later
-    start_gossip_loop("localhost", 8000)  # Re-gossip every 30s
+    send_gossip("silicon.cs.umanitoba.ca", 8999)
+
+    # send gossip every 30 seconds
+    start_gossip_loop("silicon.cs.umanitoba.ca", 8999)  # Re-gossipn to well-known host
+
+    # cleanup tracked peers every 60 seconds
     start_cleanup_loop()
 
+    # Show available commands once
+    print(f"\n[{peer_id}] Command Options:")
+    print("Use 'list'                     to view available files")
+    print("Use 'peers'                    to view connected peers")
+    print("Use 'push <filepath>'          to upload files")
+    print("Use 'get <file_id> [dest]'     to download files")
+    print("Use 'delete <file_id>'         to delete files (if you're the owner)")
+    print("Use 'exit'                     to quit\n")
+
+    # handles the CLI commands for User Input
+    start_cli_loop()
+
+
+try:
     run_tcp_server()
+except KeyboardInterrupt:
+    print(f"\n[{peer_id}] Shutting down.")
+    sys.exit(0)

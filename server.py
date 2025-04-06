@@ -96,6 +96,7 @@ def save_metadata():
         json.dump(file_metadata, f, indent=2)
     print(f"[{peer_id}] Saved metadata to file.")
 
+
 # send gossip to a random peer
 def send_gossip(to_host, to_port):
     gossip_id = str(uuid.uuid4())
@@ -116,6 +117,72 @@ def send_gossip(to_host, to_port):
         print(f"[{peer_id}] Failed to send GOSSIP to {to_host}:{to_port}: {e}")
 
 
+def handle_gossip(msg):
+    gossip_id = msg["id"]
+    sender_id = msg["peerId"]
+    sender_host = msg["host"]
+    sender_port = msg["port"]
+
+    # 1. Ignore duplicate gossip IDs
+    if gossip_id in seen_gossip_ids:
+        print(f"[{peer_id}] Already saw gossip {gossip_id}, ignoring.")
+        return
+    seen_gossip_ids.add(gossip_id)
+
+    # 2. Add sender to tracked_peers
+    if sender_id != peer_id and sender_id not in tracked_peers:
+        tracked_peers[sender_id] = {
+            "host": sender_host,
+            "port": sender_port,
+            "last_seen": time.time(),
+        }
+        print(
+            f"[{peer_id}] Tracked new peer: {sender_id} at {sender_host}:{sender_port}"
+        )
+    else:
+        tracked_peers[sender_id]["last_seen"] = time.time()
+
+    # 3. Send GOSSIP_REPLY back to sender
+    reply = {
+        "type": "GOSSIP_REPLY",
+        "host": host,
+        "port": p2p_port,
+        "peerId": peer_id,
+        "files": get_gossip_reply_metadata(),
+    }
+
+    try:
+        with socket.create_connection((sender_host, sender_port), timeout=5) as sock:
+            sock.sendall(json.dumps(reply).encode())
+        print(f"[{peer_id}] Sent GOSSIP_REPLY to {sender_id}")
+    except Exception as e:
+        print(f"[{peer_id}] Failed to send GOSSIP_REPLY to {sender_id}: {e}")
+
+    # 4. Optional: forward to 3–5 random peers (excluding sender)
+    peers_to_forward = random.sample(
+        [p for p in tracked_peers if p != sender_id and p != peer_id],
+        min(GOSSIP_FANOUT, len(tracked_peers) - 1),
+    )
+    for pid in peers_to_forward:
+        pinfo = tracked_peers[pid]
+        send_gossip(pinfo["host"], pinfo["port"])
+
+
+def get_gossip_reply_metadata():
+    reply_files = []
+    for file in file_metadata.values():
+        reply_files.append(
+            {
+                "file_name": file["file_name"],
+                "file_size": file["file_size"],
+                "file_id": file["file_id"],
+                "file_owner": file["file_owner"],
+                "file_timestamp": file["file_timestamp"],
+            }
+        )
+    return reply_files
+
+
 # here all the messages are handled
 def handle_message(conn, addr, msg):
     """
@@ -127,8 +194,8 @@ def handle_message(conn, addr, msg):
         if msg["type"] == "GOSSIP":
             # Process GOSSIP message
             print(f"[{peer_id}] Handling GOSSIP message from {msg.get('peerId')}")
-            #print(f"[{peer_id}] Full GOSSIP received:\n{json.dumps(msg, indent=2)}")
-            # Here you'll call your handle_gossip() function or similar
+            # print(f"[{peer_id}] Full GOSSIP received:\n{json.dumps(msg, indent=2)}")
+            handle_gossip(msg)
         elif msg["type"] == "GOSSIP_REPLY":
             print(f"[{peer_id}] Handling GOSSIP_REPLY from {msg.get('peerId')}")
             # Process GOSSIP_REPLY
@@ -181,17 +248,70 @@ def run_tcp_server():
                     inputs.remove(s)
                     s.close()
 
+
+# cleaning up my tracked peers
+def cleanup_tracked_peers():
+    now = time.time()
+    to_remove = []
+
+    print(f"[{peer_id}]  Checking tracked peers for cleanup...")
+
+    for peerId, peerInfo in tracked_peers.items():
+        last_seen = peerInfo["last_seen"]
+        age = now - last_seen
+
+        if age > DROP_PEER_TIMEOUT:
+            print(
+                f"[{peer_id}]  Dropping inactive peer: {peerId} (last seen {int(age)}s ago)"
+            )
+            to_remove.append(peerId)
+        else:
+            print(f"[{peer_id}]  Peer {peerId} is alive (last seen {int(age)}s ago)")
+
+    for peerId in to_remove:
+        del tracked_peers[peerId]
+
+    print(f"[{peer_id}]  Cleanup done. {len(tracked_peers)} peer(s) remaining.\n")
+
+
+# this is the re-GOSSIP thread that will run every 30 seconds
+def start_gossip_loop(well_known_host, well_known_port):
+    def loop():
+        while True:
+            time.sleep(GOSSIP_INTERVAL)
+            print(
+                f"[{peer_id}] Sending periodic GOSSIP to {well_known_host}:{well_known_port}"
+            )
+            send_gossip(well_known_host, well_known_port)
+
+    t = threading.Thread(target=loop, daemon=True)
+    t.start()
+
+
+def start_cleanup_loop():
+    def loop():
+        while True:
+            time.sleep(DROP_PEER_TIMEOUT)  # every 60 seconds
+            cleanup_tracked_peers()
+
+    t = threading.Thread(target=loop, daemon=True)
+    t.start()
+
+
 if __name__ == "__main__":
     file_metadata = load_metadata()
     save_metadata()
 
-    # Optional: show metadata
+    # Show metadata
     print(f"[{peer_id}] Current metadata entries:")
     for fid, meta in file_metadata.items():
         print(
             f" - {meta['file_name']} (ID: {fid}, Size: {meta['file_size']} Bytes, Owner: {meta['file_owner']})"
         )
 
-    send_gossip("localhost", 8000)  # You can change this to other well-known hosts
+    # Send initial gossip
+    send_gossip("localhost", 8000)  # Use real host later
+    start_gossip_loop("localhost", 8000)  # Re-gossip every 30s
+    start_cleanup_loop()
 
     run_tcp_server()

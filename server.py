@@ -1,10 +1,17 @@
 import sys
-import os
-import socket
+import select
 import json
-import uuid
+import socket
 import time
+import random
+import uuid
 import hashlib
+import re
+import random
+import functools
+import base64
+import threading
+import os
 
 # --- Parse CLI Arguments ---
 if len(sys.argv) != 5:
@@ -88,3 +95,103 @@ def save_metadata():
     with open(metadata_path, "w") as f:
         json.dump(file_metadata, f, indent=2)
     print(f"[{peer_id}] Saved metadata to file.")
+
+# send gossip to a random peer
+def send_gossip(to_host, to_port):
+    gossip_id = str(uuid.uuid4())
+    msg = {
+        "type": "GOSSIP",
+        "host": host,
+        "port": p2p_port,
+        "id": gossip_id,
+        "peerId": peer_id,
+    }
+
+    try:
+        with socket.create_connection((to_host, to_port), timeout=5) as sock:
+            sock.sendall(json.dumps(msg).encode())
+        print(f"[{peer_id}] Sent GOSSIP to {to_host}:{to_port}")
+        seen_gossip_ids.add(gossip_id)  # Mark it as seen so we don't rebroadcast
+    except Exception as e:
+        print(f"[{peer_id}] Failed to send GOSSIP to {to_host}:{to_port}: {e}")
+
+
+# here all the messages are handled
+def handle_message(conn, addr, msg):
+    """
+    Process the incoming message based on its type.
+    handle different message types (e.g., GOSSIP, GOSSIP_REPLY, etc.)
+    """
+    # For example, check the type of the message
+    if "type" in msg:
+        if msg["type"] == "GOSSIP":
+            # Process GOSSIP message
+            print(f"[{peer_id}] Handling GOSSIP message from {msg.get('peerId')}")
+            #print(f"[{peer_id}] Full GOSSIP received:\n{json.dumps(msg, indent=2)}")
+            # Here you'll call your handle_gossip() function or similar
+        elif msg["type"] == "GOSSIP_REPLY":
+            print(f"[{peer_id}] Handling GOSSIP_REPLY from {msg.get('peerId')}")
+            # Process GOSSIP_REPLY
+        else:
+            print(f"[{peer_id}] Received unknown message type: {msg['type']}")
+    else:
+        print(f"[{peer_id}] Received message without type: {msg}")
+
+
+def run_tcp_server():
+    # Create and set up the server socket.
+    server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    server_sock.bind((host, p2p_port))
+    server_sock.listen(5)
+    server_sock.setblocking(False)
+    print(f"[{peer_id}] TCP server listening on {host}:{p2p_port}")
+
+    # List of sockets to monitor for incoming data.
+    inputs = [server_sock]
+
+    while True:
+        readable, _, _ = select.select(inputs, [], [], 1)
+
+        for s in readable:
+            if s is server_sock:
+                # Accept a new connection.
+                conn, addr = server_sock.accept()
+                conn.setblocking(False)
+                inputs.append(conn)
+                print(f"[{peer_id}] Accepted connection from {addr}")
+            else:
+                try:
+                    data = s.recv(4096)
+                    if data:
+                        try:
+                            msg = json.loads(data.decode())
+
+                            # this method will handle the message
+                            handle_message(s, s.getpeername(), msg)
+
+                        except Exception as e:
+                            print(f"[{peer_id}] Error parsing message: {e}")
+                    else:
+                        print(f"[{peer_id}] Connection closed.")
+                        inputs.remove(s)
+                        s.close()
+                except Exception as e:
+                    print(f"[{peer_id}] Error reading from socket: {e}")
+                    inputs.remove(s)
+                    s.close()
+
+if __name__ == "__main__":
+    file_metadata = load_metadata()
+    save_metadata()
+
+    # Optional: show metadata
+    print(f"[{peer_id}] Current metadata entries:")
+    for fid, meta in file_metadata.items():
+        print(
+            f" - {meta['file_name']} (ID: {fid}, Size: {meta['file_size']} Bytes, Owner: {meta['file_owner']})"
+        )
+
+    send_gossip("localhost", 8000)  # You can change this to other well-known hosts
+
+    run_tcp_server()

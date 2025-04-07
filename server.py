@@ -492,7 +492,6 @@ def start_cli_loop():
     t = threading.Thread(target=loop, daemon=True)
     t.start()
 
-    t.start()
 
 
 if __name__ == "__main__":

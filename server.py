@@ -507,6 +507,55 @@ def start_cli_loop():
     t.start()
 
 
+def generate_stats_page():
+    html = "<html><head><meta http-equiv='refresh' content='2'></head><body>"
+    html += f"<h2>Peer Stats for {peer_id}</h2>"
+
+    html += "<h3>Tracked Peers</h3><ul>"
+    for pid, info in tracked_peers.items():
+        html += f"<li>{pid}: {info['host']}:{info['port']}</li>"
+    html += "</ul>"
+
+    html += "<h3>Files</h3><table border='1'><tr><th>ID</th><th>Name</th><th>Owner</th><th>Size</th><th>Timestamp</th><th>hasCopy</th><th>Peers</th></tr>"
+    for fid, meta in file_metadata.items():
+        html += f"<tr><td>{fid}</td><td>{meta['file_name']}</td><td>{meta['file_owner']}</td><td>{meta['file_size']}</td><td>{meta['file_timestamp']}</td><td>{meta['hasCopy']}</td><td>{', '.join(meta['peers_with_file'])}</td></tr>"
+    html += "</table>"
+
+    html += "</body></html>"
+    return html
+
+
+def start_http_server():
+    def loop():
+        server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        server.bind((host, http_port))
+        server.listen(5)
+        print(f"[{peer_id}] HTTP stats page running at http://{host}:{http_port}/")
+
+        while True:
+            conn, addr = server.accept()
+            try:
+                request = conn.recv(1024).decode()
+                if request.startswith("GET /favicon.ico"):
+                    conn.close()
+                    continue
+
+                html = generate_stats_page()
+                response = (
+                    "HTTP/1.1 200 OK\r\n"
+                    "Content-Type: text/html\r\n"
+                    "Connection: close\r\n\r\n" + html
+                )
+                conn.sendall(response.encode())
+            except Exception as e:
+                print(f"[{peer_id}] HTTP server error: {e}")
+            finally:
+                conn.close()
+
+    threading.Thread(target=loop, daemon=True).start()
+
+
 def start_tcp_server():
     t = threading.Thread(target=run_tcp_server, daemon=True)
     t.start()
@@ -527,6 +576,7 @@ if __name__ == "__main__":
 
     #  Start TCP server in a thread
     start_tcp_server()
+    start_http_server()  # Add this
 
     #  Continue with rest of setup
     send_gossip(well_known_host, well_known_port)

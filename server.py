@@ -84,7 +84,7 @@ def scan_storage_folder():
             "file_owner": peer_id,
             "file_timestamp": timestamp,
             "peers_with_file": [peer_id],  # store yourself
-            "hasCopy": True,
+            "hasCopy": "yes",
         }
     print(f"[{peer_id}] Generated metadata for {len(metadata)} file(s).")
     return metadata
@@ -142,7 +142,7 @@ def handle_gossip_reply(msg):
             file_metadata[file_id] = {
                 **file,
                 "peers_with_file": [sender_id],
-                "hasCopy": False,
+                "hasCopy": "no",
             }
             print(f"[{peer_id}] Added new file {file['file_name']} from {sender_id}")
         else:
@@ -439,6 +439,53 @@ def start_cleanup_loop():
     t.start()
 
 
+def handle_get_file_cli(file_id):
+    if file_id not in file_metadata:
+        print(f"[{peer_id}] File ID {file_id} not found in metadata.")
+        return
+
+    if file_metadata[file_id].get("hasCopy") == "yes":
+        print(
+            f"[{peer_id}] Already have file '{file_metadata[file_id]['file_name']}' locally."
+        )
+        return
+
+    for pid in file_metadata[file_id]["peers_with_file"]:
+        if pid == peer_id:
+            continue
+        peer_info = tracked_peers.get(pid)
+        if not peer_info:
+            continue
+
+        try:
+            with socket.create_connection(
+                (peer_info["host"], peer_info["port"]), timeout=5
+            ) as sock:
+                sock.sendall(
+                    json.dumps({"type": "GET_FILE", "file_id": file_id}).encode()
+                )
+                response = sock.recv(65536)
+                data = json.loads(response.decode())
+
+                if data.get("file_id") is None:
+                    continue
+
+                content = base64.b64decode(data["data"])
+                fname = data["file_name"]
+                with open(os.path.join(base_path, fname), "wb") as f:
+                    f.write(content)
+
+                file_metadata[file_id]["hasCopy"] = "yes"
+                save_metadata()
+                print(f"[{peer_id}] Successfully downloaded '{fname}' from {pid}")
+                return
+
+        except Exception as e:
+            print(f"[{peer_id}] Failed to download from {pid}: {e}")
+
+    print(f"[{peer_id}] Could not retrieve file from any peer.")
+
+
 def handle_cli_command(cmd):
     if cmd == "list":
         print(f"[{peer_id}] Listing {len(file_metadata)} file(s):")
@@ -459,6 +506,12 @@ def handle_cli_command(cmd):
             print(
                 f"- {pid}: {info['host']}:{info['port']} (last seen {last_seen}s ago)"
             )
+    elif cmd.startswith("get "):
+        tokens = cmd.split()
+        if len(tokens) != 2:
+            print(f"[{peer_id}] Usage: get <file_id>")
+            return
+        handle_get_file_cli(tokens[1])
 
     else:
         print(f"[{peer_id}] Unknown command: {cmd}")

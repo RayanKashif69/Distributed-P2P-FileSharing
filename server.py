@@ -309,10 +309,11 @@ def handle_message(conn, addr, msg):
 
 def try_fetch_missing_files(from_host, from_port):
     to_fetch = [
-        fid for fid, meta in file_metadata.items() if meta.get("hasCopy") == "no"
+    fid for fid, meta in file_metadata.items()
+    if meta.get("hasCopy") == "no" and "Silicon" in meta.get("peers_with_file", [])
     ]
     random.shuffle(to_fetch)
-    selected = to_fetch[:4]  # pick up to 5 files
+    selected = to_fetch[:3]  # pick up to 3 files
 
     for file_id in selected:
         print(f"[{peer_id}] Attempting to GET_FILE: {file_id}")
@@ -464,8 +465,19 @@ def handle_get_file_cli(file_id):
                 sock.sendall(
                     json.dumps({"type": "GET_FILE", "file_id": file_id}).encode()
                 )
-                response = sock.recv(65536)
-                data = json.loads(response.decode())
+                chunks = []
+                sock.settimeout(2.0)
+                while True:
+                    try:
+                        chunk = sock.recv(4096)
+                        if not chunk:
+                            break
+                        chunks.append(chunk)
+                    except socket.timeout:
+                        break
+                
+                data = json.loads(b''.join(chunks).decode())
+
 
                 if data.get("file_id") is None:
                     continue

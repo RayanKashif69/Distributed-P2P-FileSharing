@@ -70,7 +70,7 @@ def scan_storage_folder():
             content = f.read()
         stat = os.stat(fpath)
         timestamp = int(stat.st_mtime)
-        size = len(content)
+        size = len(content) // (1024 * 1024)  # integer MB
 
         h = hashlib.sha256()
         h.update(content)
@@ -84,6 +84,7 @@ def scan_storage_folder():
             "file_owner": peer_id,
             "file_timestamp": timestamp,
             "peers_with_file": [peer_id],  # store yourself
+            "hasCopy": True,
         }
     print(f"[{peer_id}] Generated metadata for {len(metadata)} file(s).")
     return metadata
@@ -117,7 +118,7 @@ def send_gossip(to_host, to_port):
         print(f"[{peer_id}] Failed to send GOSSIP to {to_host}:{to_port}: {e}")
 
 
-# handling GOSSIP_REPLY message I recieve from other peers
+# handling GOSSIP_REPLY message I receive from other peers
 def handle_gossip_reply(msg):
     sender_id = msg["peerId"]
     sender_host = msg["host"]
@@ -138,20 +139,20 @@ def handle_gossip_reply(msg):
     for file in files:
         file_id = file["file_id"]
         if file_id not in file_metadata:
-            file_metadata[file_id] = {**file, "peers_with_file": [sender_id]}
+            file_metadata[file_id] = {
+                **file,
+                "peers_with_file": [sender_id],
+                "hasCopy": False,
+            }
             print(f"[{peer_id}] Added new file {file['file_name']} from {sender_id}")
         else:
-            # File already exists
             existing = file_metadata[file_id]
-
-            # Update timestamp and info if newer
             if file["file_timestamp"] > existing["file_timestamp"]:
                 print(
                     f"[{peer_id}] Updating file {file['file_name']} to newer version from {sender_id}"
                 )
                 file_metadata[file_id].update(file)
 
-            # Always ensure the peer is listed as having this file
             if sender_id not in file_metadata[file_id]["peers_with_file"]:
                 file_metadata[file_id]["peers_with_file"].append(sender_id)
 
@@ -213,6 +214,54 @@ def handle_gossip(msg):
 #       send_gossip(pinfo["host"], pinfo["port"])
 
 
+# handle GET_FILE request and send the FILE_DATA response back
+def handle_get_file(conn, file_id):
+    file_entry = file_metadata.get(file_id)
+    if not file_entry or not file_entry.get("hasCopy", False):
+        response = {
+            "type": "FILE_DATA",
+            "file_id": None,
+            "file_name": None,
+            "file_owner": None,
+            "file_timestamp": None,
+            "file_size": 0,
+            "data": None,
+        }
+        conn.sendall(json.dumps(response).encode())
+        return
+
+    file_path = os.path.join(base_path, file_entry["file_name"])
+    try:
+        with open(file_path, "rb") as f:
+            content = f.read()
+
+        response = {
+            "type": "FILE_DATA",
+            "file_name": file_entry["file_name"],
+            "file_size": file_entry["file_size"],
+            "file_id": file_id,
+            "file_owner": file_entry["file_owner"],
+            "file_timestamp": file_entry["file_timestamp"],
+            "data": base64.b64encode(content).decode(),
+        }
+    except Exception as e:
+        print(f"[{peer_id}] Error reading file {file_id}: {e}")
+        response = {
+            "type": "FILE_DATA",
+            "file_id": None,
+            "file_name": None,
+            "file_owner": None,
+            "file_timestamp": None,
+            "file_size": 0,
+            "data": None,
+        }
+
+    try:
+        conn.sendall(json.dumps(response).encode())
+    except Exception as e:
+        print(f"[{peer_id}] Error sending FILE_DATA: {e}")
+
+
 def get_gossip_reply_metadata():
     reply_files = []
     for file in file_metadata.values():
@@ -247,6 +296,10 @@ def handle_message(conn, addr, msg):
 
             print(f"[{peer_id}] Handling GOSSIP_REPLY from {msg.get('peerId')}")
             handle_gossip_reply(msg)
+
+        elif msg["type"] == "GET_FILE":
+            print(f"[{peer_id}] Received GET_FILE request for {msg.get('file_id')}")
+            handle_get_file(conn, msg["file_id"])
 
         else:
             print(f"[{peer_id}] Received unknown message type: {msg['type']}")

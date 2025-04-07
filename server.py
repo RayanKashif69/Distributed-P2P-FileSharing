@@ -202,22 +202,21 @@ def handle_gossip(msg):
         print(f"[{peer_id}] Failed to send GOSSIP_REPLY to {sender_id}: {e}")
 
         # 4. Optional: forward to 3–5 random peers (excluding sender and self)
-    # eligible_peers = [p for p in tracked_peers if p != sender_id and p != peer_id]
+    eligible_peers = [p for p in tracked_peers if p != sender_id and p != peer_id]
 
-
-# if eligible_peers:
-#    peers_to_forward = random.sample(
-#         eligible_peers, min(GOSSIP_PEERS, len(eligible_peers))
-#    )
-#    for pid in peers_to_forward:
-#       pinfo = tracked_peers[pid]
-#       send_gossip(pinfo["host"], pinfo["port"])
+    if eligible_peers:
+        peers_to_forward = random.sample(
+            eligible_peers, min(GOSSIP_PEERS, len(eligible_peers))
+        )
+    for pid in peers_to_forward:
+        pinfo = tracked_peers[pid]
+        send_gossip(pinfo["host"], pinfo["port"])
 
 
 # handle GET_FILE request and send the FILE_DATA response back
 def handle_get_file(conn, file_id):
     file_entry = file_metadata.get(file_id)
-    if not file_entry or not file_entry.get("hasCopy", False):
+    if not file_entry or file_entry.get("hasCopy") != "yes":
         response = {
             "type": "FILE_DATA",
             "file_id": None,
@@ -229,12 +228,10 @@ def handle_get_file(conn, file_id):
         }
         conn.sendall(json.dumps(response).encode())
         return
-
     file_path = os.path.join(base_path, file_entry["file_name"])
     try:
         with open(file_path, "rb") as f:
             content = f.read()
-
         response = {
             "type": "FILE_DATA",
             "file_name": file_entry["file_name"],
@@ -255,7 +252,6 @@ def handle_get_file(conn, file_id):
             "file_size": 0,
             "data": None,
         }
-
     try:
         conn.sendall(json.dumps(response).encode())
     except Exception as e:
@@ -307,45 +303,6 @@ def handle_message(conn, addr, msg):
         print(f"[{peer_id}] Received message without type: {msg}")
 
 
-def try_fetch_missing_files(from_host, from_port):
-    to_fetch = [
-    fid for fid, meta in file_metadata.items()
-    if meta.get("hasCopy") == "no" and "Silicon" in meta.get("peers_with_file", [])
-    ]
-    random.shuffle(to_fetch)
-    selected = to_fetch[:3]  # pick up to 3 files
-
-    for file_id in selected:
-        print(f"[{peer_id}] Attempting to GET_FILE: {file_id}")
-        try:
-            with socket.create_connection((from_host, from_port), timeout=5) as sock:
-                msg = {"type": "GET_FILE", "file_id": file_id}
-                sock.sendall(json.dumps(msg).encode())
-
-                response = sock.recv(65536)
-                data = json.loads(response.decode())
-
-                if data.get("file_id") is None:
-                    print(f"[{peer_id}] File {file_id} not found on {from_host}")
-                    continue
-
-                content = base64.b64decode(data["data"])
-                fname = data["file_name"]
-                with open(os.path.join(base_path, fname), "wb") as f:
-                    f.write(content)
-
-                # Update metadata
-                file_metadata[file_id]["hasCopy"] = "yes"
-                print(f"[{peer_id}] Downloaded and stored {fname} (id: {file_id})")
-
-        except Exception as e:
-            print(
-                f"[{peer_id}] Failed to GET_FILE {file_id} from {from_host}:{from_port}: {e}"
-            )
-
-    save_metadata()
-
-
 def run_tcp_server():
     # Create and set up the server socket.
     server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -395,7 +352,7 @@ def cleanup_tracked_peers():
     now = time.time()
     to_remove = []
 
-    print(f"[{peer_id}]  Checking tracked peers for cleanup...")
+    # print(f"[{peer_id}]  Checking tracked peers for cleanup...")
 
     for peerId, peerInfo in tracked_peers.items():
         last_seen = peerInfo["last_seen"]
@@ -412,7 +369,7 @@ def cleanup_tracked_peers():
     for peerId in to_remove:
         del tracked_peers[peerId]
 
-    print(f"[{peer_id}]  Cleanup done. {len(tracked_peers)} peer(s) remaining.\n")
+    # print(f"[{peer_id}]  Cleanup done. {len(tracked_peers)} peer(s) remaining.\n")
 
 
 # this is the re-GOSSIP thread that will run every 30 seconds
@@ -444,20 +401,17 @@ def handle_get_file_cli(file_id):
     if file_id not in file_metadata:
         print(f"[{peer_id}] File ID {file_id} not found in metadata.")
         return
-
     if file_metadata[file_id].get("hasCopy") == "yes":
         print(
             f"[{peer_id}] Already have file '{file_metadata[file_id]['file_name']}' locally."
         )
         return
-
     for pid in file_metadata[file_id]["peers_with_file"]:
         if pid == peer_id:
             continue
         peer_info = tracked_peers.get(pid)
         if not peer_info:
             continue
-
         try:
             with socket.create_connection(
                 (peer_info["host"], peer_info["port"]), timeout=5
@@ -475,26 +429,19 @@ def handle_get_file_cli(file_id):
                         chunks.append(chunk)
                     except socket.timeout:
                         break
-                
-                data = json.loads(b''.join(chunks).decode())
-
-
+                data = json.loads(b"".join(chunks).decode())
                 if data.get("file_id") is None:
                     continue
-
                 content = base64.b64decode(data["data"])
                 fname = data["file_name"]
                 with open(os.path.join(base_path, fname), "wb") as f:
                     f.write(content)
-
                 file_metadata[file_id]["hasCopy"] = "yes"
                 save_metadata()
                 print(f"[{peer_id}] Successfully downloaded '{fname}' from {pid}")
                 return
-
         except Exception as e:
             print(f"[{peer_id}] Failed to download from {pid}: {e}")
-
     print(f"[{peer_id}] Could not retrieve file from any peer.")
 
 
@@ -545,46 +492,26 @@ def start_cli_loop():
     t = threading.Thread(target=loop, daemon=True)
     t.start()
 
-def start_tcp_server():
-    t = threading.Thread(target=run_tcp_server, daemon=True)
     t.start()
 
 
 if __name__ == "__main__":
     file_metadata = load_metadata()
     save_metadata()
-
-    # Show metadata
     print(f"[{peer_id}] Current metadata entries:")
     for fid, meta in file_metadata.items():
         print(
             f" - {meta['file_name']} (ID: {fid}, Size: {meta['file_size']} Bytes, Owner: {meta['file_owner']})"
         )
-
-    #  Start TCP server 
-    start_tcp_server()
-
-    # Pick a well-known host
     selected = random.choice(WELL_KNOWN_HOSTS)
     well_known_host = f"{selected}.cs.umanitoba.ca"
     well_known_port = 8999
 
-    # Initial GOSSIP
     send_gossip(well_known_host, well_known_port)
 
-    # Start periodic gossip loop
     start_gossip_loop(well_known_host, well_known_port)
-
-    # Cleanup peers loop
     start_cleanup_loop()
 
-    #  Wait to receive GOSSIP_REPLYs
-    time.sleep(5)
-
-    # Try downloading a few files
-    try_fetch_missing_files("silicon.cs.umanitoba.ca", 8999)
-
-    # CLI commands
     print(f"\n[{peer_id}] Command Options:")
     print("Use 'list'                     to view available files")
     print("Use 'peers'                    to view connected peers")
@@ -592,9 +519,10 @@ if __name__ == "__main__":
     print("Use 'get <file_id> [dest]'     to download files")
     print("Use 'delete <file_id>'         to delete files (if you're the owner)")
     print("Use 'exit'                     to quit\n")
-
     start_cli_loop()
 
-    #  Block forever on TCP server thread (optional fallback)
-    while True:
-        time.sleep(1)
+    try:
+        run_tcp_server()
+    except KeyboardInterrupt:
+        print(f"\n[{peer_id}] Shutting down.")
+        sys.exit(0)

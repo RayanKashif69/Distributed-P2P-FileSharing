@@ -32,6 +32,7 @@ os.makedirs(base_path, exist_ok=True)
 GOSSIP_PEERS = 3
 GOSSIP_INTERVAL = 30
 PEER_DROP_TIMEOUT = 60
+WELL_KNOWN_HOSTS = ["silicon", "eagle", "grebe", "hawk"]
 
 # Internal State
 seen_gossip_ids = set()
@@ -200,15 +201,16 @@ def handle_gossip(msg):
         print(f"[{peer_id}] Failed to send GOSSIP_REPLY to {sender_id}: {e}")
 
         # 4. Optional: forward to 3–5 random peers (excluding sender and self)
-    eligible_peers = [p for p in tracked_peers if p != sender_id and p != peer_id]
+    # eligible_peers = [p for p in tracked_peers if p != sender_id and p != peer_id]
 
-    if eligible_peers:
-        peers_to_forward = random.sample(
-            eligible_peers, min(GOSSIP_PEERS, len(eligible_peers))
-        )
-        for pid in peers_to_forward:
-            pinfo = tracked_peers[pid]
-            send_gossip(pinfo["host"], pinfo["port"])
+
+# if eligible_peers:
+#    peers_to_forward = random.sample(
+#         eligible_peers, min(GOSSIP_PEERS, len(eligible_peers))
+#    )
+#    for pid in peers_to_forward:
+#       pinfo = tracked_peers[pid]
+#       send_gossip(pinfo["host"], pinfo["port"])
 
 
 def get_gossip_reply_metadata():
@@ -312,8 +314,8 @@ def cleanup_tracked_peers():
                 f"[{peer_id}]  Dropping inactive peer: {peerId} (last seen {int(age)}s ago)"
             )
             to_remove.append(peerId)
-        else:
-            print(f"[{peer_id}]  Peer {peerId} is alive (last seen {int(age)}s ago)")
+        # else:
+        #   print(f"[{peer_id}]  Peer {peerId} is alive (last seen {int(age)}s ago)")
 
     for peerId in to_remove:
         del tracked_peers[peerId]
@@ -341,9 +343,9 @@ def start_cleanup_loop():
         while True:
             time.sleep(10)  # check every 10s
             cleanup_tracked_peers()
+
     t = threading.Thread(target=loop, daemon=True)
     t.start()
-
 
 
 def handle_cli_command(cmd):
@@ -399,13 +401,16 @@ if __name__ == "__main__":
             f" - {meta['file_name']} (ID: {fid}, Size: {meta['file_size']} Bytes, Owner: {meta['file_owner']})"
         )
 
-    # Send initial gossip
-    send_gossip("silicon.cs.umanitoba.ca", 8999)
+    #  Randomly pick a well-known host
+    selected = random.choice(WELL_KNOWN_HOSTS)
+    well_known_host = f"{selected}.cs.umanitoba.ca"
+    well_known_port = 8999
 
-    # send gossip every 30 seconds
-    start_gossip_loop(
-        "silicon.cs.umanitoba.ca", 8999
-    )  # Re-gossiping to well-known host
+    #  Initial GOSSIP
+    send_gossip(well_known_host, well_known_port)
+
+    #  Periodic gossiping to same selected well-known host
+    start_gossip_loop(well_known_host, well_known_port)
 
     # cleanup tracked peers every 60 seconds
     start_cleanup_loop()

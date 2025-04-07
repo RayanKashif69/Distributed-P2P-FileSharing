@@ -495,6 +495,42 @@ def start_cli_loop():
     t.start()
 
 
+from http.server import BaseHTTPRequestHandler, HTTPServer
+
+
+def start_http_server():
+    class StatsHandler(BaseHTTPRequestHandler):
+        def do_GET(self):
+            self.send_response(200)
+            self.send_header("Content-type", "text/html")
+            self.end_headers()
+
+            html = "<html><head><meta http-equiv='refresh' content='1'>"
+            html += f"<title>Peer Stats - {peer_id}</title></head><body>"
+            html += f"<h1>Peer Stats</h1><b>Peer ID:</b> {peer_id}<br><br>"
+
+            html += "<h2>Tracked Peers</h2><table border='1'><tr><th>Peer ID</th><th>Host</th><th>Port</th><th>Last Seen</th></tr>"
+            for pid, info in tracked_peers.items():
+                age = int(time.time() - info["last_seen"])
+                html += f"<tr><td>{pid}</td><td>{info['host']}</td><td>{info['port']}</td><td>{age}s ago</td></tr>"
+            html += "</table><br>"
+
+            html += "<h2>Files</h2><table border='1'><tr><th>File ID</th><th>Name</th><th>Owner</th><th>Size (MB)</th><th>Timestamp</th><th>Has Copy</th><th>Peers with File</th></tr>"
+            for fid, meta in file_metadata.items():
+                file_id_short = fid[:8] + "..."
+                html += f"<tr><td>{file_id_short}</td><td>{meta['file_name']}</td><td>{meta['file_owner']}</td><td>{meta['file_size']}</td><td>{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(meta['file_timestamp']))}</td><td>{meta.get('hasCopy', 'no')}</td><td>{', '.join(meta['peers_with_file'])}</td></tr>"
+            html += "</table></body></html>"
+
+            self.wfile.write(html.encode())
+
+    def run():
+        httpd = HTTPServer((host, http_port), StatsHandler)
+        print(f"[{peer_id}] HTTP Stats Server running at http://{host}:{http_port}/")
+        httpd.serve_forever()
+
+    threading.Thread(target=run, daemon=True).start()
+
+
 if __name__ == "__main__":
     file_metadata = load_metadata()
     save_metadata()
@@ -511,6 +547,9 @@ if __name__ == "__main__":
 
     start_gossip_loop(well_known_host, well_known_port)
     start_cleanup_loop()
+
+    #  Start web server for stats on a separate thread
+    start_http_server()
 
     print(f"\n[{peer_id}] Command Options:")
     print("Use 'list'                     to view available files")

@@ -32,7 +32,7 @@ os.makedirs(base_path, exist_ok=True)
 GOSSIP_PEERS = 3
 GOSSIP_INTERVAL = 30
 PEER_DROP_TIMEOUT = 60
-WELL_KNOWN_HOSTS = ["silicon", "eagle", "grebe", "hawk"]
+WELL_KNOWN_HOSTS = ["silicon"]
 
 # Internal State
 seen_gossip_ids = set()

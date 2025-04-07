@@ -506,6 +506,8 @@ if __name__ == "__main__":
     well_known_host = f"{selected}.cs.umanitoba.ca"
     well_known_port = 8999
 
+    run_tcp_server() 
+
     send_gossip(well_known_host, well_known_port)
 
     start_gossip_loop(well_known_host, well_known_port)
@@ -520,8 +522,3 @@ if __name__ == "__main__":
     print("Use 'exit'                     to quit\n")
     start_cli_loop()
 
-    try:
-        run_tcp_server()
-    except KeyboardInterrupt:
-        print(f"\n[{peer_id}] Shutting down.")
-        sys.exit(0)

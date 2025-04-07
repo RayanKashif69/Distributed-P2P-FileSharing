@@ -29,9 +29,9 @@ os.makedirs(base_path, exist_ok=True)
 
 
 # Constants
-GOSSIP_FANOUT = 3
+GOSSIP_PEERS = 3
 GOSSIP_INTERVAL = 30
-DROP_PEER_TIMEOUT = 60
+PEER_DROP_TIMEOUT = 60
 
 # Internal State
 seen_gossip_ids = set()
@@ -204,7 +204,7 @@ def handle_gossip(msg):
 
     if eligible_peers:
         peers_to_forward = random.sample(
-            eligible_peers, min(GOSSIP_FANOUT, len(eligible_peers))
+            eligible_peers, min(GOSSIP_PEERS, len(eligible_peers))
         )
         for pid in peers_to_forward:
             pinfo = tracked_peers[pid]
@@ -307,7 +307,7 @@ def cleanup_tracked_peers():
         last_seen = peerInfo["last_seen"]
         age = now - last_seen
 
-        if age > DROP_PEER_TIMEOUT:
+        if age > PEER_DROP_TIMEOUT:
             print(
                 f"[{peer_id}]  Dropping inactive peer: {peerId} (last seen {int(age)}s ago)"
             )
@@ -339,7 +339,7 @@ def start_gossip_loop(well_known_host, well_known_port):
 def start_cleanup_loop():
     def loop():
         while True:
-            time.sleep(DROP_PEER_TIMEOUT)  # every 60 seconds
+            time.sleep(PEER_DROP_TIMEOUT)  # every 60 seconds
             cleanup_tracked_peers()
 
     t = threading.Thread(target=loop, daemon=True)
@@ -403,7 +403,9 @@ if __name__ == "__main__":
     send_gossip("silicon.cs.umanitoba.ca", 8999)
 
     # send gossip every 30 seconds
-    start_gossip_loop("silicon.cs.umanitoba.ca", 8999)  # Re-gossipn to well-known host
+    start_gossip_loop(
+        "silicon.cs.umanitoba.ca", 8999
+    )  # Re-gossiping to well-known host
 
     # cleanup tracked peers every 60 seconds
     start_cleanup_loop()

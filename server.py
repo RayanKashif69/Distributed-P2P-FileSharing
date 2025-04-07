@@ -335,15 +335,15 @@ def start_gossip_loop(well_known_host, well_known_port):
     t.start()
 
 
-# starts the cleanup thread that will run every 60 seconds
+# starts the cleanup thread that will run every 10 seconds
 def start_cleanup_loop():
     def loop():
         while True:
-            time.sleep(DROP_PEER_TIMEOUT)  # every 60 seconds
+            time.sleep(10)  # check every 10s
             cleanup_tracked_peers()
-
     t = threading.Thread(target=loop, daemon=True)
     t.start()
+
 
 
 def handle_cli_command(cmd):

@@ -32,7 +32,7 @@ os.makedirs(base_path, exist_ok=True)
 GOSSIP_PEERS = 3
 GOSSIP_INTERVAL = 30
 PEER_DROP_TIMEOUT = 60
-WELL_KNOWN_HOSTS = ["silicon"]
+WELL_KNOWN_HOSTS = ["silicon", "hawk", "grebe", "eagle"]
 
 # Internal State
 seen_gossip_ids = set()
@@ -201,16 +201,19 @@ def handle_gossip(msg):
     except Exception as e:
         print(f"[{peer_id}] Failed to send GOSSIP_REPLY to {sender_id}: {e}")
 
-        # 4. Optional: forward to 3–5 random peers (excluding sender and self)
+    # 4. Forward GOSSIP to random peers
     eligible_peers = [p for p in tracked_peers if p != sender_id and p != peer_id]
 
     if eligible_peers:
         peers_to_forward = random.sample(
             eligible_peers, min(GOSSIP_PEERS, len(eligible_peers))
         )
-    for pid in peers_to_forward:
-        pinfo = tracked_peers[pid]
-        send_gossip(pinfo["host"], pinfo["port"])
+        for pid in peers_to_forward:
+            pinfo = tracked_peers[pid]
+            print(
+                f"[{peer_id}] Forwarding GOSSIP to {pid} at {pinfo['host']}:{pinfo['port']}"
+            )
+            send_gossip(pinfo["host"], pinfo["port"])
 
 
 # handle GET_FILE request and send the FILE_DATA response back
@@ -304,7 +307,6 @@ def handle_message(conn, addr, msg):
 
 
 def run_tcp_server():
-    # Create and set up the server socket.
     server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     server_sock.bind((host, p2p_port))
@@ -312,38 +314,41 @@ def run_tcp_server():
     server_sock.setblocking(False)
     print(f"[{peer_id}] TCP server listening on {host}:{p2p_port}")
 
-    # List of sockets to monitor for incoming data.
     inputs = [server_sock]
+    buffers = {}  # socket -> data buffer
 
     while True:
         readable, _, _ = select.select(inputs, [], [], 1)
 
         for s in readable:
             if s is server_sock:
-                # Accept a new connection.
                 conn, addr = server_sock.accept()
                 conn.setblocking(False)
                 inputs.append(conn)
+                buffers[conn] = b""
                 print(f"[{peer_id}] Accepted connection from {addr}")
             else:
                 try:
-                    data = s.recv(4096)
-                    if data:
+                    chunk = s.recv(4096)
+                    if chunk:
+                        buffers[s] += chunk
                         try:
-                            msg = json.loads(data.decode())
-
-                            # this method will handle the message
+                            # Try decoding full JSON object
+                            msg = json.loads(buffers[s].decode())
                             handle_message(s, s.getpeername(), msg)
-
-                        except Exception as e:
-                            print(f"[{peer_id}] Error parsing message: {e}")
+                            buffers[s] = b""  # Clear buffer after successful parse
+                        except json.JSONDecodeError:
+                            # Wait for more data if JSON is incomplete
+                            continue
                     else:
                         print(f"[{peer_id}] Connection closed.")
                         inputs.remove(s)
+                        buffers.pop(s, None)
                         s.close()
                 except Exception as e:
                     print(f"[{peer_id}] Error reading from socket: {e}")
                     inputs.remove(s)
+                    buffers.pop(s, None)
                     s.close()
 
 
@@ -352,35 +357,44 @@ def cleanup_tracked_peers():
     now = time.time()
     to_remove = []
 
-    # print(f"[{peer_id}]  Checking tracked peers for cleanup...")
-
     for peerId, peerInfo in tracked_peers.items():
         last_seen = peerInfo["last_seen"]
         age = now - last_seen
 
         if age > PEER_DROP_TIMEOUT:
             print(
-                f"[{peer_id}]  Dropping inactive peer: {peerId} (last seen {int(age)}s ago)"
+                f"[{peer_id}] Dropping inactive peer: {peerId} (last seen {int(age)}s ago)"
             )
             to_remove.append(peerId)
-        # else:
-        #   print(f"[{peer_id}]  Peer {peerId} is alive (last seen {int(age)}s ago)")
 
+    # Actually remove the peers
     for peerId in to_remove:
         del tracked_peers[peerId]
 
-    # print(f"[{peer_id}]  Cleanup done. {len(tracked_peers)} peer(s) remaining.\n")
+        # Now remove this peerId from any files' peers_with_file lists
+        for meta in file_metadata.values():
+            if peerId in meta["peers_with_file"]:
+                meta["peers_with_file"].remove(peerId)
+
+    save_metadata()
+    print(f"[{peer_id}] Cleanup done. {len(tracked_peers)} peer(s) remaining.\n")
 
 
 # this is the re-GOSSIP thread that will run every 30 seconds
-def start_gossip_loop(well_known_host, well_known_port):
+def start_gossip_loop():
     def loop():
         while True:
             time.sleep(GOSSIP_INTERVAL)
-            print(
-                f"[{peer_id}] Sending periodic GOSSIP to {well_known_host}:{well_known_port}"
-            )
-            send_gossip(well_known_host, well_known_port)
+
+            # Get 3–5 peers you are tracking
+            eligible = list(tracked_peers.values())
+            if not eligible:
+                print(f"[{peer_id}] No tracked peers to re-gossip to.")
+                continue
+
+            selected_peers = random.sample(eligible, min(GOSSIP_PEERS, len(eligible)))
+            for peer in selected_peers:
+                send_gossip(peer["host"], peer["port"])
 
     t = threading.Thread(target=loop, daemon=True)
     t.start()
@@ -493,6 +507,10 @@ def start_cli_loop():
     t.start()
 
 
+def start_tcp_server():
+    t = threading.Thread(target=run_tcp_server, daemon=True)
+    t.start()
+
 
 if __name__ == "__main__":
     file_metadata = load_metadata()
@@ -502,15 +520,17 @@ if __name__ == "__main__":
         print(
             f" - {meta['file_name']} (ID: {fid}, Size: {meta['file_size']} Bytes, Owner: {meta['file_owner']})"
         )
+
     selected = random.choice(WELL_KNOWN_HOSTS)
     well_known_host = f"{selected}.cs.umanitoba.ca"
     well_known_port = 8999
 
-    run_tcp_server() 
+    #  Start TCP server in a thread
+    start_tcp_server()
 
+    #  Continue with rest of setup
     send_gossip(well_known_host, well_known_port)
-
-    start_gossip_loop(well_known_host, well_known_port)
+    start_gossip_loop()
     start_cleanup_loop()
 
     print(f"\n[{peer_id}] Command Options:")
@@ -520,5 +540,9 @@ if __name__ == "__main__":
     print("Use 'get <file_id> [dest]'     to download files")
     print("Use 'delete <file_id>'         to delete files (if you're the owner)")
     print("Use 'exit'                     to quit\n")
+
     start_cli_loop()
 
+    # Optional: keep main thread alive
+    while True:
+        time.sleep(1)

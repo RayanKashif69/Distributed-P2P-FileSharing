@@ -533,6 +533,10 @@ def start_cli_loop():
     t = threading.Thread(target=loop, daemon=True)
     t.start()
 
+def start_tcp_server():
+    t = threading.Thread(target=run_tcp_server, daemon=True)
+    t.start()
+
 
 if __name__ == "__main__":
     file_metadata = load_metadata()
@@ -545,25 +549,30 @@ if __name__ == "__main__":
             f" - {meta['file_name']} (ID: {fid}, Size: {meta['file_size']} Bytes, Owner: {meta['file_owner']})"
         )
 
-    #  Randomly pick a well-known host
+    #  Start TCP server 
+    start_tcp_server()
+
+    # Pick a well-known host
     selected = random.choice(WELL_KNOWN_HOSTS)
     well_known_host = f"{selected}.cs.umanitoba.ca"
     well_known_port = 8999
 
-    #  Initial GOSSIP
+    # Initial GOSSIP
     send_gossip(well_known_host, well_known_port)
 
-    #  Periodic gossiping to same selected well-known host
+    # Start periodic gossip loop
     start_gossip_loop(well_known_host, well_known_port)
 
-    # Give time for GOSSIP_REPLYs to arrive
-    time.sleep(5)
-    try_fetch_missing_files("silicon.cs.umanitoba.ca", 8999)
-
-    # cleanup tracked peers every 60 seconds
+    # Cleanup peers loop
     start_cleanup_loop()
 
-    # Show available commands once
+    #  Wait to receive GOSSIP_REPLYs
+    time.sleep(5)
+
+    # Try downloading a few files
+    try_fetch_missing_files("silicon.cs.umanitoba.ca", 8999)
+
+    # CLI commands
     print(f"\n[{peer_id}] Command Options:")
     print("Use 'list'                     to view available files")
     print("Use 'peers'                    to view connected peers")
@@ -572,12 +581,8 @@ if __name__ == "__main__":
     print("Use 'delete <file_id>'         to delete files (if you're the owner)")
     print("Use 'exit'                     to quit\n")
 
-    # handles the CLI commands for User Input
     start_cli_loop()
 
-
-try:
-    run_tcp_server()
-except KeyboardInterrupt:
-    print(f"\n[{peer_id}] Shutting down.")
-    sys.exit(0)
+    #  Block forever on TCP server thread (optional fallback)
+    while True:
+        time.sleep(1)

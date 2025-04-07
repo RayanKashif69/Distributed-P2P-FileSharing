@@ -307,6 +307,44 @@ def handle_message(conn, addr, msg):
         print(f"[{peer_id}] Received message without type: {msg}")
 
 
+def try_fetch_missing_files(from_host, from_port):
+    to_fetch = [
+        fid for fid, meta in file_metadata.items() if meta.get("hasCopy") == "no"
+    ]
+    random.shuffle(to_fetch)
+    selected = to_fetch[:4]  # pick up to 5 files
+
+    for file_id in selected:
+        print(f"[{peer_id}] Attempting to GET_FILE: {file_id}")
+        try:
+            with socket.create_connection((from_host, from_port), timeout=5) as sock:
+                msg = {"type": "GET_FILE", "file_id": file_id}
+                sock.sendall(json.dumps(msg).encode())
+
+                response = sock.recv(65536)
+                data = json.loads(response.decode())
+
+                if data.get("file_id") is None:
+                    print(f"[{peer_id}] File {file_id} not found on {from_host}")
+                    continue
+
+                content = base64.b64decode(data["data"])
+                fname = data["file_name"]
+                with open(os.path.join(base_path, fname), "wb") as f:
+                    f.write(content)
+
+                # Update metadata
+                file_metadata[file_id]["hasCopy"] = "yes"
+                print(f"[{peer_id}] Downloaded and stored {fname} (id: {file_id})")
+
+        except Exception as e:
+            print(
+                f"[{peer_id}] Failed to GET_FILE {file_id} from {from_host}:{from_port}: {e}"
+            )
+
+    save_metadata()
+
+
 def run_tcp_server():
     # Create and set up the server socket.
     server_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -464,6 +502,10 @@ if __name__ == "__main__":
 
     #  Periodic gossiping to same selected well-known host
     start_gossip_loop(well_known_host, well_known_port)
+
+    # Give time for GOSSIP_REPLYs to arrive
+    time.sleep(5)
+    try_fetch_missing_files("silicon.cs.umanitoba.ca", 8999)
 
     # cleanup tracked peers every 60 seconds
     start_cleanup_loop()

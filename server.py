@@ -11,6 +11,7 @@ import functools
 import base64
 import threading
 import os
+import datetime
 
 # --- Parse CLI Arguments ---
 if len(sys.argv) != 5:
@@ -468,7 +469,10 @@ def handle_cli_command(cmd):
             print(f"ID        : {meta['file_id']}")
             print(f"Size      : {meta['file_size']} bytes")
             print(f"Owner     : {meta['file_owner']}")
-            print(f"Timestamp : {meta['file_timestamp']}")
+            readable_ts = datetime.datetime.fromtimestamp(
+                meta["file_timestamp"]
+            ).strftime("%Y-%m-%d %H:%M:%S")
+            print(f"Timestamp : {readable_ts}")
             print(f"Available on peers: {', '.join(meta['peers_with_file'])}")
         print("-" * 50)
 
@@ -485,7 +489,6 @@ def handle_cli_command(cmd):
             print(f"[{peer_id}] Usage: get <file_id>")
             return
         handle_get_file_cli(tokens[1])
-
     else:
         print(f"[{peer_id}] Unknown command: {cmd}")
 
@@ -521,15 +524,22 @@ def generate_stats_page():
 
     # Files Table
     html += "<h3>Files</h3>"
-    html += "<table border='1'><tr><th>ID</th><th>Name</th><th>Owner</th><th>Size</th><th>Timestamp</th><th>hasCopy</th><th>Peers</th></tr>"
+    html += "<table border='1'><tr><th>ID</th><th>Name</th><th>Owner</th><th>Size (MB)</th><th>Timestamp</th><th>hasCopy</th><th>Peers</th></tr>"
     for fid, meta in file_metadata.items():
-        short_id = fid[:10] + "..."
-        html += (
-            f"<tr><td>{short_id}</td><td>{meta['file_name']}</td>"
-            f"<td>{meta['file_owner']}</td><td>{meta['file_size']}</td>"
-            f"<td>{meta['file_timestamp']}</td><td>{meta['hasCopy']}</td>"
-            f"<td>{', '.join(meta['peers_with_file'])}</td></tr>"
-        )
+        try:
+            short_id = fid[:10] + "..."
+            readable_ts = datetime.datetime.fromtimestamp(
+                float(meta["file_timestamp"])
+            ).strftime("%Y-%m-%d %H:%M:%S")
+            peers_str = ", ".join(meta.get("peers_with_file", []))
+            html += (
+                f"<tr><td>{short_id}</td><td>{meta['file_name']}</td>"
+                f"<td>{meta['file_owner']}</td><td>{meta['file_size']}</td>"
+                f"<td>{readable_ts}</td><td>{meta['hasCopy']}</td>"
+                f"<td>{peers_str}</td></tr>"
+            )
+        except Exception as e:
+            print(f"⚠️ Error rendering row for {fid}: {e}")
     html += "</table>"
 
     html += "</body></html>"

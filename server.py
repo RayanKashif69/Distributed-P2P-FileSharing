@@ -265,15 +265,17 @@ def handle_get_file(conn, file_id):
 def get_gossip_reply_metadata():
     reply_files = []
     for file in file_metadata.values():
-        reply_files.append(
-            {
-                "file_name": file["file_name"],
-                "file_size": file["file_size"],
-                "file_id": file["file_id"],
-                "file_owner": file["file_owner"],
-                "file_timestamp": file["file_timestamp"],
-            }
-        )
+        if file.get("hasCopy") == "yes":
+            reply_files.append(
+                {
+                    "file_name": file["file_name"],
+                    "file_size": file["file_size"],
+                    "file_id": file["file_id"],
+                    "file_owner": file["file_owner"],
+                    "file_timestamp": file["file_timestamp"],
+                }
+            )
+    print(f"[{peer_id}] GOSSIP_REPLY will include {len(reply_files)} file(s).")
     return reply_files
 
 

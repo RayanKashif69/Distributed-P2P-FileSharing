@@ -439,7 +439,7 @@ def handle_get_file_cli(file_id):
 
                 # Receive response in chunks
                 chunks = []
-                sock.settimeout(5.0)  # More generous timeout
+                sock.settimeout(10.0)  # More generous timeout
                 while True:
                     try:
                         chunk = sock.recv(4096)

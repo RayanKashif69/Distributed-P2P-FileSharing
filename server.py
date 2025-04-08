@@ -241,7 +241,7 @@ def handle_get_file(conn, file_id):
     try:
         with open(file_path, "rb") as f:
             content = f.read()
-        encoded = base64.b64encode(content).decode()
+        encoded = content.hex()
 
         response = {
             "type": "FILE_DATA",
@@ -325,7 +325,7 @@ def run_tcp_server():
                 conn.setblocking(False)
                 inputs.append(conn)
                 buffers[conn] = b""
-               # print(f"[{peer_id}] Accepted connection from {addr}")
+            # print(f"[{peer_id}] Accepted connection from {addr}")
             else:
                 try:
                     chunk = s.recv(4096)
@@ -423,7 +423,7 @@ def handle_get_file_cli(file_id):
     found = False
     for peer_id_candidate in meta["peers_with_file"]:
         if peer_id_candidate == peer_id:
-            continue  # if im the peer itself
+            continue  # Skip if it's me
 
         peer_info = tracked_peers.get(peer_id_candidate)
         if not peer_info:
@@ -452,9 +452,7 @@ def handle_get_file_cli(file_id):
                 raw_data = b"".join(chunks).decode()
                 response = json.loads(raw_data)
 
-                print(
-                    json.dumps(response, indent=2)
-                )  # show what i get from the get command
+                print(json.dumps(response, indent=2))  # Debug output
 
                 if response.get("file_id") is None:
                     print(
@@ -462,8 +460,8 @@ def handle_get_file_cli(file_id):
                     )
                     continue
 
-                # Save file locally
-                content = base64.b64decode(response["data"])
+                #  Decode hex instead of base64
+                content = bytes.fromhex(response["data"])
                 fname = response["file_name"]
                 with open(os.path.join(base_path, fname), "wb") as f:
                     f.write(content)
@@ -567,7 +565,7 @@ def generate_stats_page():
                 f"<td>{peers_str}</td></tr>"
             )
         except Exception as e:
-            print(f"⚠️ Error rendering row for {fid}: {e}")
+            print(f" Error rendering row for {fid}: {e}")
     html += "</table>"
 
     html += "</body></html>"

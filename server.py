@@ -325,7 +325,7 @@ def run_tcp_server():
                 conn.setblocking(False)
                 inputs.append(conn)
                 buffers[conn] = b""
-                print(f"[{peer_id}] Accepted connection from {addr}")
+               # print(f"[{peer_id}] Accepted connection from {addr}")
             else:
                 try:
                     chunk = s.recv(4096)

@@ -511,14 +511,25 @@ def generate_stats_page():
     html = "<html><head><meta http-equiv='refresh' content='2'></head><body>"
     html += f"<h2>Peer Stats for {peer_id}</h2>"
 
-    html += "<h3>Tracked Peers</h3><ul>"
+    # Tracked Peers Table
+    html += "<h3>Tracked Peers</h3>"
+    html += "<table border='1'><tr><th>Peer ID</th><th>Host</th><th>Port</th><th>Last Seen</th></tr>"
     for pid, info in tracked_peers.items():
-        html += f"<li>{pid}: {info['host']}:{info['port']}</li>"
-    html += "</ul>"
+        last_seen = int(time.time() - info["last_seen"])
+        html += f"<tr><td>{pid}</td><td>{info['host']}</td><td>{info['port']}</td><td>{last_seen}s ago</td></tr>"
+    html += "</table>"
 
-    html += "<h3>Files</h3><table border='1'><tr><th>ID</th><th>Name</th><th>Owner</th><th>Size</th><th>Timestamp</th><th>hasCopy</th><th>Peers</th></tr>"
+    # Files Table
+    html += "<h3>Files</h3>"
+    html += "<table border='1'><tr><th>ID</th><th>Name</th><th>Owner</th><th>Size</th><th>Timestamp</th><th>hasCopy</th><th>Peers</th></tr>"
     for fid, meta in file_metadata.items():
-        html += f"<tr><td>{fid}</td><td>{meta['file_name']}</td><td>{meta['file_owner']}</td><td>{meta['file_size']}</td><td>{meta['file_timestamp']}</td><td>{meta['hasCopy']}</td><td>{', '.join(meta['peers_with_file'])}</td></tr>"
+        short_id = fid[:10] + "..."
+        html += (
+            f"<tr><td>{short_id}</td><td>{meta['file_name']}</td>"
+            f"<td>{meta['file_owner']}</td><td>{meta['file_size']}</td>"
+            f"<td>{meta['file_timestamp']}</td><td>{meta['hasCopy']}</td>"
+            f"<td>{', '.join(meta['peers_with_file'])}</td></tr>"
+        )
     html += "</table>"
 
     html += "</body></html>"

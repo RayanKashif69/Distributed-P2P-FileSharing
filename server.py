@@ -96,7 +96,7 @@ def save_metadata():
     metadata_path = os.path.join(base_path, "metadata.json")
     with open(metadata_path, "w") as f:
         json.dump(file_metadata, f, indent=2)
-    print(f"[{peer_id}] Saved metadata to file.")
+    # print(f"[{peer_id}] Saved metadata to file.")
 
 
 # send gossip to a random peer
@@ -113,7 +113,7 @@ def send_gossip(to_host, to_port):
     try:
         with socket.create_connection((to_host, to_port), timeout=5) as sock:
             sock.sendall(json.dumps(msg).encode())
-        print(f"[{peer_id}] Sent GOSSIP to {to_host}:{to_port}")
+        # print(f"[{peer_id}] Sent GOSSIP to {to_host}:{to_port}")
         seen_gossip_ids.add(gossip_id)  # Mark it as seen so we don't rebroadcast
     except Exception as e:
         print(f"[{peer_id}] Failed to send GOSSIP to {to_host}:{to_port}: {e}")
@@ -198,7 +198,7 @@ def handle_gossip(msg):
     try:
         with socket.create_connection((sender_host, sender_port), timeout=5) as sock:
             sock.sendall(json.dumps(reply).encode())
-        print(f"[{peer_id}] Sent GOSSIP_REPLY to {sender_id}")
+    #    print(f"[{peer_id}] Sent GOSSIP_REPLY to {sender_id}")
     except Exception as e:
         print(f"[{peer_id}] Failed to send GOSSIP_REPLY to {sender_id}: {e}")
 
@@ -211,9 +211,9 @@ def handle_gossip(msg):
         )
         for pid in peers_to_forward:
             pinfo = tracked_peers[pid]
-            print(
-                f"[{peer_id}] Forwarding GOSSIP to {pid} at {pinfo['host']}:{pinfo['port']}"
-            )
+            # print(
+            #   f"[{peer_id}] Forwarding GOSSIP to {pid} at {pinfo['host']}:{pinfo['port']}"
+            # )
             send_gossip(pinfo["host"], pinfo["port"])
 
 
@@ -286,13 +286,13 @@ def handle_message(conn, addr, msg):
         if msg["type"] == "GOSSIP":
 
             # Process GOSSIP message
-            print(f"[{peer_id}] Handling GOSSIP message from {msg.get('peerId')}")
+            # print(f"[{peer_id}] Handling GOSSIP message from {msg.get('peerId')}")
             # print(f"[{peer_id}] Full GOSSIP received:\n{json.dumps(msg, indent=2)}")
             handle_gossip(msg)
 
         elif msg["type"] == "GOSSIP_REPLY":
 
-            print(f"[{peer_id}] Handling GOSSIP_REPLY from {msg.get('peerId')}")
+            # print(f"[{peer_id}] Handling GOSSIP_REPLY from {msg.get('peerId')}")
             handle_gossip_reply(msg)
 
         elif msg["type"] == "GET_FILE":
@@ -495,7 +495,7 @@ def handle_cli_command(cmd):
             print("-" * 50)
             print(f"Name      : {meta['file_name']}")
             print(f"ID        : {meta['file_id']}")
-            print(f"Size      : {meta['file_size']} bytes")
+            print(f"Size      : {meta['file_size']} mbs")
             print(f"Owner     : {meta['file_owner']}")
             readable_ts = datetime.datetime.fromtimestamp(
                 meta["file_timestamp"]

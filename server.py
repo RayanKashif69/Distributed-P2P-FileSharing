@@ -169,7 +169,7 @@ def handle_gossip(msg):
 
     # 1. Ignore duplicate gossip IDs
     if gossip_id in seen_gossip_ids:
-        print(f"[{peer_id}] Already saw gossip {gossip_id}, ignoring.")
+        # print(f"[{peer_id}] Already saw gossip {gossip_id}, ignoring.")
         return
     seen_gossip_ids.add(gossip_id)
 
@@ -219,8 +219,12 @@ def handle_gossip(msg):
 
 # handle GET_FILE request and send the FILE_DATA response back
 def handle_get_file(conn, file_id):
-    file_entry = file_metadata.get(file_id)
-    if not file_entry or file_entry.get("hasCopy") != "yes":
+    entry = file_metadata.get(file_id)
+
+    if not entry or entry.get("hasCopy") != "yes":
+        print(
+            f"[{peer_id}] Cannot fulfill GET_FILE for {file_id} (not found or no copy)"
+        )
         response = {
             "type": "FILE_DATA",
             "file_id": None,
@@ -232,34 +236,26 @@ def handle_get_file(conn, file_id):
         }
         conn.sendall(json.dumps(response).encode())
         return
-    file_path = os.path.join(base_path, file_entry["file_name"])
+
+    file_path = os.path.join(base_path, entry["file_name"])
     try:
         with open(file_path, "rb") as f:
             content = f.read()
+        encoded = base64.b64encode(content).decode()
+
         response = {
             "type": "FILE_DATA",
-            "file_name": file_entry["file_name"],
-            "file_size": file_entry["file_size"],
             "file_id": file_id,
-            "file_owner": file_entry["file_owner"],
-            "file_timestamp": file_entry["file_timestamp"],
-            "data": base64.b64encode(content).decode(),
+            "file_name": entry["file_name"],
+            "file_owner": entry["file_owner"],
+            "file_timestamp": entry["file_timestamp"],
+            "file_size": entry["file_size"],
+            "data": encoded,
         }
-    except Exception as e:
-        print(f"[{peer_id}] Error reading file {file_id}: {e}")
-        response = {
-            "type": "FILE_DATA",
-            "file_id": None,
-            "file_name": None,
-            "file_owner": None,
-            "file_timestamp": None,
-            "file_size": 0,
-            "data": None,
-        }
-    try:
         conn.sendall(json.dumps(response).encode())
+        print(f"[{peer_id}] Sent file '{entry['file_name']}' (ID: {file_id}) to peer")
     except Exception as e:
-        print(f"[{peer_id}] Error sending FILE_DATA: {e}")
+        print(f"[{peer_id}] Error reading/sending file: {e}")
 
 
 def get_gossip_reply_metadata():
@@ -344,12 +340,12 @@ def run_tcp_server():
                             # Wait for more data if JSON is incomplete
                             continue
                     else:
-                        print(f"[{peer_id}] Connection closed.")
+                        # print(f"[{peer_id}] Connection closed.")
                         inputs.remove(s)
                         buffers.pop(s, None)
                         s.close()
                 except Exception as e:
-                    print(f"[{peer_id}] Error reading from socket: {e}")
+                    # print(f"[{peer_id}] Error reading from socket: {e}")
                     inputs.remove(s)
                     buffers.pop(s, None)
                     s.close()
@@ -365,9 +361,7 @@ def cleanup_tracked_peers():
         age = now - last_seen
 
         if age > PEER_DROP_TIMEOUT:
-            print(
-                f"[{peer_id}] Dropping inactive peer: {peerId} (last seen {int(age)}s ago)"
-            )
+            print(f"[{peer_id}] Dropping inactive peer: {peerId} (n {int(age)}s ago)")
             to_remove.append(peerId)
 
     # Actually remove the peers
@@ -380,7 +374,7 @@ def cleanup_tracked_peers():
                 meta["peers_with_file"].remove(peerId)
 
     save_metadata()
-    print(f"[{peer_id}] Cleanup done. {len(tracked_peers)} peer(s) remaining.\n")
+    # print(f"[{peer_id}] Cleanup done. {len(tracked_peers)} peer(s) remaining.\n")
 
 
 # this is the re-GOSSIP thread that will run every 30 seconds
@@ -392,7 +386,7 @@ def start_gossip_loop():
             # Get 3–5 peers you are tracking
             eligible = list(tracked_peers.values())
             if not eligible:
-                print(f"[{peer_id}] No tracked peers to re-gossip to.")
+                # print(f"[{peer_id}] No tracked peers to re-gossip to.")
                 continue
 
             selected_peers = random.sample(eligible, min(GOSSIP_PEERS, len(eligible)))
@@ -414,21 +408,27 @@ def start_cleanup_loop():
     t.start()
 
 
+# GET <fileid> command handler
 def handle_get_file_cli(file_id):
     if file_id not in file_metadata:
         print(f"[{peer_id}] File ID {file_id} not found in metadata.")
         return
-    if file_metadata[file_id].get("hasCopy") == "yes":
-        print(
-            f"[{peer_id}] Already have file '{file_metadata[file_id]['file_name']}' locally."
-        )
+
+    meta = file_metadata[file_id]
+
+    if meta.get("hasCopy") == "yes":
+        print(f"[{peer_id}] Already have file '{meta['file_name']}' locally.")
         return
-    for pid in file_metadata[file_id]["peers_with_file"]:
-        if pid == peer_id:
-            continue
-        peer_info = tracked_peers.get(pid)
+
+    found = False
+    for peer_id_candidate in meta["peers_with_file"]:
+        if peer_id_candidate == peer_id:
+            continue  # if im the peer itself
+
+        peer_info = tracked_peers.get(peer_id_candidate)
         if not peer_info:
-            continue
+            continue  # Skip if we don’t have their host/port info
+
         try:
             with socket.create_connection(
                 (peer_info["host"], peer_info["port"]), timeout=5
@@ -436,6 +436,8 @@ def handle_get_file_cli(file_id):
                 sock.sendall(
                     json.dumps({"type": "GET_FILE", "file_id": file_id}).encode()
                 )
+
+                # Receive in chunks (handle large payloads)
                 chunks = []
                 sock.settimeout(2.0)
                 while True:
@@ -446,20 +448,44 @@ def handle_get_file_cli(file_id):
                         chunks.append(chunk)
                     except socket.timeout:
                         break
-                data = json.loads(b"".join(chunks).decode())
-                if data.get("file_id") is None:
+
+                raw_data = b"".join(chunks).decode()
+                response = json.loads(raw_data)
+
+                print(
+                    json.dumps(response, indent=2)
+                )  # show what i get from the get command
+
+                if response.get("file_id") is None:
+                    print(
+                        f"[{peer_id}] Peer {peer_id_candidate} does not have the file."
+                    )
                     continue
-                content = base64.b64decode(data["data"])
-                fname = data["file_name"]
+
+                # Save file locally
+                content = base64.b64decode(response["data"])
+                fname = response["file_name"]
                 with open(os.path.join(base_path, fname), "wb") as f:
                     f.write(content)
+
+                # Update metadata
                 file_metadata[file_id]["hasCopy"] = "yes"
+                if peer_id not in file_metadata[file_id]["peers_with_file"]:
+                    file_metadata[file_id]["peers_with_file"].append(peer_id)
+
                 save_metadata()
-                print(f"[{peer_id}] Successfully downloaded '{fname}' from {pid}")
-                return
+
+                print(
+                    f"[{peer_id}] Successfully downloaded '{fname}' from {peer_id_candidate}"
+                )
+                found = True
+                break
+
         except Exception as e:
-            print(f"[{peer_id}] Failed to download from {pid}: {e}")
-    print(f"[{peer_id}] Could not retrieve file from any peer.")
+            print(f"[{peer_id}] Failed to download from {peer_id_candidate}: {e}")
+
+    if not found:
+        print(f"[{peer_id}] Could not retrieve file from any available peer.")
 
 
 def handle_cli_command(cmd):

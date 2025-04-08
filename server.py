@@ -423,23 +423,23 @@ def handle_get_file_cli(file_id):
     found = False
     for peer_id_candidate in meta["peers_with_file"]:
         if peer_id_candidate == peer_id:
-            continue  # Skip if it's me
+            continue  # Skip self
 
         peer_info = tracked_peers.get(peer_id_candidate)
         if not peer_info:
-            continue  # Skip if we don’t have their host/port info
+            continue  # Skip unknown peers
 
         try:
             with socket.create_connection(
                 (peer_info["host"], peer_info["port"]), timeout=5
             ) as sock:
-                sock.sendall(
-                    json.dumps({"type": "GET_FILE", "file_id": file_id}).encode()
-                )
+                # Send GET_FILE request
+                request = {"type": "GET_FILE", "file_id": file_id}
+                sock.sendall(json.dumps(request).encode())
 
-                # Receive in chunks (handle large payloads)
+                # Receive response in chunks
                 chunks = []
-                sock.settimeout(2.0)
+                sock.settimeout(5.0)  # More generous timeout
                 while True:
                     try:
                         chunk = sock.recv(4096)
@@ -447,10 +447,24 @@ def handle_get_file_cli(file_id):
                             break
                         chunks.append(chunk)
                     except socket.timeout:
-                        break
+                        break  # Stop after timeout, assume transmission complete
 
                 raw_data = b"".join(chunks).decode()
-                response = json.loads(raw_data)
+
+                if not raw_data.strip():
+                    print(f"[{peer_id}] Peer {peer_id_candidate} sent no data.")
+                    continue
+
+                try:
+                    response = json.loads(raw_data)
+                except json.JSONDecodeError as jde:
+                    print(
+                        f"[{peer_id}] JSON decode error from {peer_id_candidate}: {jde}"
+                    )
+                    print(
+                        f"[{peer_id}] Raw data (first 200 chars): {repr(raw_data[:200])}"
+                    )
+                    continue
 
                 print(json.dumps(response, indent=2))  # Debug output
 
@@ -460,8 +474,13 @@ def handle_get_file_cli(file_id):
                     )
                     continue
 
-                #  Decode hex instead of base64
-                content = bytes.fromhex(response["data"])
+                # Decode hex data
+                try:
+                    content = bytes.fromhex(response["data"])
+                except Exception as e:
+                    print(f"[{peer_id}] Failed to decode hex content: {e}")
+                    continue
+
                 fname = response["file_name"]
                 with open(os.path.join(base_path, fname), "wb") as f:
                     f.write(content)

@@ -128,8 +128,8 @@ def handle_gossip_reply(msg):
 
     # 1. Update tracked_peers
     if sender_id != peer_id:
-        if sender_id not in tracked_peers:
-            print(f"[{peer_id}] Tracking new peer from reply: {sender_id}")
+        # if sender_id not in tracked_peers:
+        # print(f"[{peer_id}] Tracking new peer from reply: {sender_id}")
         tracked_peers[sender_id] = {
             "host": sender_host,
             "port": sender_port,
@@ -145,7 +145,7 @@ def handle_gossip_reply(msg):
                 "peers_with_file": [sender_id],
                 "hasCopy": "no",
             }
-            print(f"[{peer_id}] Added new file {file['file_name']} from {sender_id}")
+            # print(f"[{peer_id}] Added new file {file['file_name']} from {sender_id}")
         else:
             existing = file_metadata[file_id]
             if file["file_timestamp"] > existing["file_timestamp"]:
@@ -180,9 +180,9 @@ def handle_gossip(msg):
             "port": sender_port,
             "last_seen": time.time(),
         }
-        print(
-            f"[{peer_id}] Tracked new peer: {sender_id} at {sender_host}:{sender_port}"
-        )
+        # print(
+        #    f"[{peer_id}] Tracked new peer: {sender_id} at {sender_host}:{sender_port}"
+        # )
     else:
         tracked_peers[sender_id]["last_seen"] = time.time()
 
@@ -303,6 +303,100 @@ def handle_message(conn, addr, msg):
             print(f"[{peer_id}] Received unknown message type: {msg['type']}")
     else:
         print(f"[{peer_id}] Received message without type: {msg}")
+
+
+def announce_new_file(file_id):
+    entry = file_metadata[file_id]
+    msg = {
+        "type": "ANNOUNCE",
+        "from": peer_id,
+        "file_name": entry["file_name"],
+        "file_size": entry["file_size"],
+        "file_id": file_id,
+        "file_owner": entry["file_owner"],
+        "file_timestamp": entry["file_timestamp"],
+    }
+
+    for pid, pinfo in tracked_peers.items():
+        try:
+            with socket.create_connection(
+                (pinfo["host"], pinfo["port"]), timeout=5
+            ) as sock:
+                sock.sendall(json.dumps(msg).encode())
+        except:
+            continue  # silently ignore for now
+
+
+def push_to_random_peer(file_id, file_name, content, file_size, timestamp):
+    encoded = content.hex()
+    msg = {
+        "type": "FILE_DATA",
+        "file_id": file_id,
+        "file_name": file_name,
+        "file_owner": peer_id,
+        "file_timestamp": timestamp,
+        "file_size": file_size,
+        "data": encoded,
+    }
+
+    eligible_peers = [p for p in tracked_peers if p != peer_id]
+    if not eligible_peers:
+        print(f"[{peer_id}] No peers to push the file to.")
+        return
+
+    selected_peer = random.choice(eligible_peers)
+    peer_info = tracked_peers[selected_peer]
+
+    try:
+        with socket.create_connection(
+            (peer_info["host"], peer_info["port"]), timeout=5
+        ) as sock:
+            sock.sendall(json.dumps(msg).encode())
+        print(f"[{peer_id}] Pushed file to peer {selected_peer}")
+    except Exception as e:
+        print(f"[{peer_id}] Failed to push file to {selected_peer}: {e}")
+
+
+def handle_push_command(file_path):
+    if not os.path.isfile(file_path):
+        print(f"[{peer_id}] File '{file_path}' does not exist.")
+        return
+
+    try:
+        with open(file_path, "rb") as f:
+            content = f.read()
+        file_name = os.path.basename(file_path)
+        file_size = len(content)
+        timestamp = int(time.time())
+        file_id = hashlib.sha256(content + str(timestamp).encode()).hexdigest()
+
+        # Save locally
+        dest_path = os.path.join(base_path, file_name)
+        with open(dest_path, "wb") as f:
+            f.write(content)
+
+        # Update metadata
+        file_metadata[file_id] = {
+            "file_name": file_name,
+            "file_size": file_size,
+            "file_id": file_id,
+            "file_owner": peer_id,
+            "file_timestamp": timestamp,
+            "hasCopy": "yes",
+            "peers_with_file": [peer_id],
+        }
+
+        save_metadata()
+        print(f"[{peer_id}] Pushed file '{file_name}' (ID: {file_id}) locally.")
+
+        # Step 2: Push to one other peer
+        push_to_random_peer(file_id, file_name, content, file_size, timestamp)
+
+        # Step 3: Announce to all tracked peers
+        announce_new_file(file_id)
+
+    except Exception as e:
+        print(f"[{peer_id}] Failed to push file: {e}")
 
 
 def run_tcp_server():
@@ -452,21 +546,21 @@ def handle_get_file_cli(file_id):
                 raw_data = b"".join(chunks).decode()
 
                 if not raw_data.strip():
-                    print(f"[{peer_id}] Peer {peer_id_candidate} sent no data.")
+                    # print(f"[{peer_id}] Peer {peer_id_candidate} sent no data.")
                     continue
 
                 try:
                     response = json.loads(raw_data)
                 except json.JSONDecodeError as jde:
-                    print(
-                        f"[{peer_id}] JSON decode error from {peer_id_candidate}: {jde}"
-                    )
-                    print(
-                        f"[{peer_id}] Raw data (first 200 chars): {repr(raw_data[:200])}"
-                    )
+                    # print(
+                    #    f"[{peer_id}] JSON decode error from {peer_id_candidate}: {jde}"
+                    # )
+                    # print(
+                    #    f"[{peer_id}] Raw data (first 200 chars): {repr(raw_data[:200])}"
+                    # )
                     continue
 
-                print(json.dumps(response, indent=2))  # Debug output
+                # print(json.dumps(response, indent=2))  # Debug output
 
                 if response.get("file_id") is None:
                     print(
@@ -478,7 +572,7 @@ def handle_get_file_cli(file_id):
                 try:
                     content = bytes.fromhex(response["data"])
                 except Exception as e:
-                    print(f"[{peer_id}] Failed to decode hex content: {e}")
+                    # print(f"[{peer_id}] Failed to decode hex content: {e}")
                     continue
 
                 fname = response["file_name"]
@@ -499,7 +593,8 @@ def handle_get_file_cli(file_id):
                 break
 
         except Exception as e:
-            print(f"[{peer_id}] Failed to download from {peer_id_candidate}: {e}")
+            # print(f"[{peer_id}] Failed to download from {peer_id_candidate}: {e}")
+            pass
 
     if not found:
         print(f"[{peer_id}] Could not retrieve file from any available peer.")

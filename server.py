@@ -629,6 +629,12 @@ def handle_cli_command(cmd):
             print(f"[{peer_id}] Usage: get <file_id>")
             return
         handle_get_file_cli(tokens[1])
+    elif cmd.startswith("push "):
+        tokens = cmd.split(" ", 1)
+        if len(tokens) != 2:
+            print(f"[{peer_id}] Usage: push <file_path>")
+            return
+        handle_push_command(tokens[1])
     else:
         print(f"[{peer_id}] Unknown command: {cmd}")
 

@@ -719,21 +719,15 @@ def handle_get_file_cli(file_id):
 
 def auto_fetch_files_on_startup():
     print(f"[{peer_id}] Attempting to auto-fetch 3 files from the network...")
-
-    candidates = [
-        fid for fid, meta in file_metadata.items() if meta.get("hasCopy") != "yes"
+    missing_files = [
+        fid
+        for fid, meta in file_metadata.items()
+        if meta["hasCopy"] == "no" and meta["peers_with_file"]
     ]
-
-    if not candidates:
-        print(f"[{peer_id}] No missing files to fetch on startup.")
-        return
-
-    # Pick up to 3 random missing files
-    files_to_fetch = random.sample(candidates, min(3, len(candidates)))
-
-    for file_id in files_to_fetch:
-        print(f"[{peer_id}] Auto-fetching file ID: {file_id}")
-        handle_get_file_cli(file_id)  # This already saves and announces the file
+    random.shuffle(missing_files)
+    for fid in missing_files[:3]:
+        print(f"[{peer_id}] Auto-fetching file ID: {fid}")
+        handle_get_file_cli(fid)
 
 
 # handle DELETE command from CLI

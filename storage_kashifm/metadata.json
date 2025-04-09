@@ -1,19 +1,4 @@
 {
-  "ad589f37ddfcc093dc7ce6dc626f93ac8ee5fac9ac4a1a5e946cf1afe21610a0": {
-    "file_name": "jamesk1.txt",
-    "file_size": 9.0,
-    "file_id": "ad589f37ddfcc093dc7ce6dc626f93ac8ee5fac9ac4a1a5e946cf1afe21610a0",
-    "file_owner": "ad589f37ddfcc093dc7ce6dc626f93ac8ee5fac9ac4a1a5e946cf1afe21610a0",
-    "file_timestamp": 1744132987.0,
-    "peers_with_file": [
-      "Shivam",
-      "steph",
-      "sbedi",
-      "Shivamgre",
-      "santosan3"
-    ],
-    "hasCopy": "no"
-  },
   "aa3d87025fe45ff8af821a03f73590c75bb832ec20c4e6690a66cc105ed02953": {
     "file_name": "saulo-profile-s.jpeg",
     "file_size": 0.019560813903808594,
@@ -21,57 +6,11 @@
     "file_owner": "bedis3",
     "file_timestamp": 1743801128.0,
     "peers_with_file": [
-      "Shivam",
-      "sbedi",
-      "Shivamgre",
-      "Silicon"
-    ],
-    "hasCopy": "no"
-  },
-  "b7f3b768aab110b36f4941c1d190798ceefc5fdf9ae33d45c7078dd5ad31092c": {
-    "file_name": "bitcoin.pdf",
-    "file_size": 0.17575454711914062,
-    "file_id": "b7f3b768aab110b36f4941c1d190798ceefc5fdf9ae33d45c7078dd5ad31092c",
-    "file_owner": "Prof",
-    "file_timestamp": 1743466870.0,
-    "peers_with_file": [
-      "Shivam",
-      "steph",
-      "sbedi",
-      "Shivamgre",
+      "shivam",
+      "Eagle",
+      "Grebe",
       "Silicon",
-      "kashifm",
-      "Hawk"
-    ],
-    "hasCopy": "yes"
-  },
-  "98134faf55ea208b8c74536e25bf17f66205b3ea512ca9f0548b154e2bc0783e": {
-    "file_name": "test.txt",
-    "file_size": 1.239776611328125e-05,
-    "file_id": "98134faf55ea208b8c74536e25bf17f66205b3ea512ca9f0548b154e2bc0783e",
-    "file_owner": "7913482",
-    "file_timestamp": 1743988884.0,
-    "peers_with_file": [
-      "Shivam",
-      "sbedi",
-      "Shivamgre",
-      "Silicon",
-      "Hawk"
-    ],
-    "hasCopy": "no"
-  },
-  "b201ac6b24ac5ea48d9c7e57cc0307d8e294420886733ff56dc4375ef95bc9ad": {
-    "file_name": "test.txt",
-    "file_size": 1.239776611328125e-05,
-    "file_id": "b201ac6b24ac5ea48d9c7e57cc0307d8e294420886733ff56dc4375ef95bc9ad",
-    "file_owner": "b201ac6b24ac5ea48d9c7e57cc0307d8e294420886733ff56dc4375ef95bc9ad",
-    "file_timestamp": 1744007783.0,
-    "peers_with_file": [
-      "Shivam",
-      "steph",
-      "sbedi",
-      "Shivamgre",
-      "Hawk"
+      "Zephyr"
     ],
     "hasCopy": "no"
   },
@@ -82,27 +21,113 @@
     "file_owner": "Prof",
     "file_timestamp": 1743466903.0,
     "peers_with_file": [
-      "Shivam",
-      "sbedi",
-      "Shivamgre",
+      "shivam",
+      "Hawk",
+      "Eagle",
+      "Grebe",
+      "Silicon",
+      "Zephyr"
+    ],
+    "hasCopy": "no"
+  },
+  "b7f3b768aab110b36f4941c1d190798ceefc5fdf9ae33d45c7078dd5ad31092c": {
+    "file_name": "bitcoin.pdf",
+    "file_size": 0.17575454711914062,
+    "file_id": "b7f3b768aab110b36f4941c1d190798ceefc5fdf9ae33d45c7078dd5ad31092c",
+    "file_owner": "Prof",
+    "file_timestamp": 1743466870.0,
+    "peers_with_file": [
+      "shivam",
+      "Hawk",
+      "Eagle",
+      "Grebe",
       "Silicon",
       "kashifm",
-      "Hawk"
+      "Zephyr"
     ],
     "hasCopy": "yes"
+  },
+  "411e61253244b35831e17f02fe9f1ae7b4699239d7e6edd218fc970f91a0bc88": {
+    "file_name": "image.png",
+    "file_size": 2.2039670944213867,
+    "file_id": "411e61253244b35831e17f02fe9f1ae7b4699239d7e6edd218fc970f91a0bc88",
+    "file_owner": "Prof",
+    "file_timestamp": 1743466889.0,
+    "peers_with_file": [
+      "shivam",
+      "Hawk",
+      "Eagle",
+      "kashifm",
+      "Zephyr"
+    ],
+    "hasCopy": "yes"
+  },
+  "98134faf55ea208b8c74536e25bf17f66205b3ea512ca9f0548b154e2bc0783e": {
+    "file_name": "test.txt",
+    "file_size": 1.239776611328125e-05,
+    "file_id": "98134faf55ea208b8c74536e25bf17f66205b3ea512ca9f0548b154e2bc0783e",
+    "file_owner": "7913482",
+    "file_timestamp": 1743988884.0,
+    "peers": [
+      "sbedi",
+      "Silicon",
+      "Iheanac1",
+      "jamesk1"
+    ],
+    "peers_with_file": [
+      "shivam",
+      "Hawk",
+      "Eagle",
+      "Grebe",
+      "Silicon",
+      "Zephyr"
+    ],
+    "hasCopy": "no"
+  },
+  "b201ac6b24ac5ea48d9c7e57cc0307d8e294420886733ff56dc4375ef95bc9ad": {
+    "file_name": "test.txt",
+    "file_size": 1.239776611328125e-05,
+    "file_id": "b201ac6b24ac5ea48d9c7e57cc0307d8e294420886733ff56dc4375ef95bc9ad",
+    "file_owner": "steph",
+    "file_timestamp": 1744007783.0,
+    "peers": [
+      "Silicon",
+      "Iheanac1",
+      "jamesk1"
+    ],
+    "peers_with_file": [
+      "shivam",
+      "Hawk",
+      "Eagle",
+      "Grebe"
+    ],
+    "hasCopy": "no"
+  },
+  "15b6693d4e522386d52c46279bf6bdcdb3ac62b778f2c1fd97a8edb138990c13": {
+    "file_name": "Kobe_Bryant_LIKE_WEEZY.mp4",
+    "file_size": 6.219932556152344,
+    "file_id": "15b6693d4e522386d52c46279bf6bdcdb3ac62b778f2c1fd97a8edb138990c13",
+    "file_owner": "ulepa",
+    "file_timestamp": 1744190680.0,
+    "peers_with_file": [
+      "shivam",
+      "Hawk",
+      "Zephyr"
+    ],
+    "hasCopy": "no"
   },
   "8793adf34e106d5b5e3b8a55262f5310caefe61441b99c06179f5cebf00228df": {
     "file_name": "KrabbyPattySecretFormula.txt",
     "file_size": 4.673004150390625e-05,
     "file_id": "8793adf34e106d5b5e3b8a55262f5310caefe61441b99c06179f5cebf00228df",
-    "file_owner": "8793adf34e106d5b5e3b8a55262f5310caefe61441b99c06179f5cebf00228df",
+    "file_owner": "nguye89",
     "file_timestamp": 1744057384.0,
     "peers_with_file": [
-      "Shivam",
-      "steph",
-      "sbedi",
-      "Shivamgre",
-      "Silicon"
+      "shivam",
+      "Eagle",
+      "Grebe",
+      "Silicon",
+      "Zephyr"
     ],
     "hasCopy": "no"
   },
@@ -113,68 +138,62 @@
     "file_owner": "pujarias",
     "file_timestamp": 1744168091.0,
     "peers_with_file": [
-      "Shivam",
-      "sbedi",
-      "Shivamgre",
-      "Silicon"
+      "shivam",
+      "Silicon",
+      "Zephyr"
     ],
     "hasCopy": "no"
   },
-  "cf4d4b22096da88ef31041db608ab70bdd34c80ab6e7ee5cfdff31dd4e5f089d": {
-    "file_name": "jamesk1.txt",
-    "file_size": 9,
-    "file_id": "cf4d4b22096da88ef31041db608ab70bdd34c80ab6e7ee5cfdff31dd4e5f089d",
+  "63520564857241dfffc92b338af2624d5a56fdd3ff2b9682158d943f9fe1b816": {
+    "file_name": "tset.txt",
+    "file_size": 997,
+    "file_id": "63520564857241dfffc92b338af2624d5a56fdd3ff2b9682158d943f9fe1b816",
     "file_owner": "jamesk1",
-    "file_timestamp": 1744134338.0,
+    "file_timestamp": 1744223274.0,
     "peers_with_file": [
-      "Shivam",
-      "sbedi",
-      "Shivamgre"
+      "shivam",
+      "Hawk",
+      "Zephyr"
     ],
     "hasCopy": "no"
   },
-  "411e61253244b35831e17f02fe9f1ae7b4699239d7e6edd218fc970f91a0bc88": {
-    "file_name": "image.png",
-    "file_size": 2.2039670944213867,
-    "file_id": "411e61253244b35831e17f02fe9f1ae7b4699239d7e6edd218fc970f91a0bc88",
-    "file_owner": "Prof",
-    "file_timestamp": 1743466889.0,
-    "peers_with_file": [
-      "Shivam",
-      "sbedi",
-      "Shivamgre",
-      "Hawk"
-    ],
-    "hasCopy": "no"
-  },
-  "546e57385b450cefadcac4469bea3e2eb2beac01e8138b52b402750eb244610a": {
+  "de6737ccbc8c99431223a39ca5cf69fbe1e0c30b5c4a9193b80119caeef73623": {
     "file_name": "arsenal.txt",
-    "file_size": 6928,
-    "file_id": "546e57385b450cefadcac4469bea3e2eb2beac01e8138b52b402750eb244610a",
+    "file_size": 0.01,
+    "file_id": "de6737ccbc8c99431223a39ca5cf69fbe1e0c30b5c4a9193b80119caeef73623",
     "file_owner": "kashifm",
-    "file_timestamp": 1744175602.0,
-    "peers": [
-      "sbedi",
-      "zagadatyaga"
+    "file_timestamp": 1744182152.0,
+    "peers_with_file": [
+      "shivam",
+      "Silicon",
+      "Zephyr"
     ],
-    "hasCopy": "no",
-    "peers_with_file": [
-      "Shivam",
-      "sbedi",
-      "Shivamgre",
-      "santosan3"
-    ]
+    "hasCopy": "no"
   },
-  "5acda21a06bd0dd3494f9404815b8f81fbe1373238a044be783e2d499e97499c": {
-    "file_name": "sonne.txt",
-    "file_size": 123,
-    "file_id": "5acda21a06bd0dd3494f9404815b8f81fbe1373238a044be783e2d499e97499c",
-    "file_owner": "prokopie",
-    "file_timestamp": 1744168730.0,
+  "8fcfdf70bc4bfbe8c4a35cc5ff591610b925872e23a3f5ee81d4b043385b119b": {
+    "file_name": "Frank_Ocean_Nights_Live2017.mp4",
+    "file_size": 4.520358085632324,
+    "file_id": "8fcfdf70bc4bfbe8c4a35cc5ff591610b925872e23a3f5ee81d4b043385b119b",
+    "file_owner": "ulepa",
+    "file_timestamp": 1744191071.0,
     "peers_with_file": [
-      "Shivam",
-      "sbedi",
-      "Shivamgre"
+      "shivam",
+      "Silicon",
+      "Zephyr",
+      "kashifm"
+    ],
+    "hasCopy": "yes"
+  },
+  "d4f9972b8625935aa4b7d4816197d848e0f27453eb2763606dee0c93c8916d26": {
+    "file_name": "testTextFile.txt",
+    "file_size": 123,
+    "file_id": "d4f9972b8625935aa4b7d4816197d848e0f27453eb2763606dee0c93c8916d26",
+    "file_owner": "prokopie",
+    "file_timestamp": 1744165614.0,
+    "peers_with_file": [
+      "shivam",
+      "Eagle",
+      "Zephyr"
     ],
     "hasCopy": "no"
   },
@@ -184,53 +203,23 @@
     "file_id": "958048d047574be7990d70dbe7ef8ee37fea72f1f55f76304553197e1e14c552",
     "file_owner": "prokopie",
     "file_timestamp": 1744167591.0,
-    "peers": [
-      "sbedi",
-      "zagadatyaga",
-      "Eagle"
-    ],
-    "hasCopy": "no",
     "peers_with_file": [
-      "Shivam",
-      "sbedi",
-      "Shivamgre"
-    ]
-  },
-  "d72c43c5ed5834e1467eb90793d131bfb948b7ccd40c9e891c8d3e01675cd20f": {
-    "file_name": "saulo-profile-s.jpeg",
-    "file_size": 20511,
-    "file_id": "d72c43c5ed5834e1467eb90793d131bfb948b7ccd40c9e891c8d3e01675cd20f",
-    "file_owner": null,
-    "file_timestamp": 1744175520.0,
-    "peers_with_file": [
-      "Shivam",
-      "Shivamgre"
+      "shivam",
+      "Eagle",
+      "Zephyr"
     ],
     "hasCopy": "no"
   },
-  "d4f9972b8625935aa4b7d4816197d848e0f27453eb2763606dee0c93c8916d26": {
-    "file_name": "testTextFile.txt",
+  "5acda21a06bd0dd3494f9404815b8f81fbe1373238a044be783e2d499e97499c": {
+    "file_name": "sonne.txt",
     "file_size": 123,
-    "file_id": "d4f9972b8625935aa4b7d4816197d848e0f27453eb2763606dee0c93c8916d26",
+    "file_id": "5acda21a06bd0dd3494f9404815b8f81fbe1373238a044be783e2d499e97499c",
     "file_owner": "prokopie",
-    "file_timestamp": 1744165614.0,
+    "file_timestamp": 1744168730.0,
     "peers_with_file": [
-      "Shivam",
-      "sbedi",
-      "Shivamgre"
-    ],
-    "hasCopy": "no"
-  },
-  "2cc9ba6c99903efebc16890daba1923c99b764da5201afa7c77521ea774495c4": {
-    "file_name": "testDelete.txt",
-    "file_size": 952,
-    "file_id": "2cc9ba6c99903efebc16890daba1923c99b764da5201afa7c77521ea774495c4",
-    "file_owner": "pujarias",
-    "file_timestamp": 1744180659.0,
-    "peers_with_file": [
-      "Shivam",
-      "sbedi",
-      "Shivamgre"
+      "shivam",
+      "Eagle",
+      "Zephyr"
     ],
     "hasCopy": "no"
   },
@@ -241,64 +230,9 @@
     "file_owner": "kashifm",
     "file_timestamp": 1744178142.0,
     "peers_with_file": [
-      "Shivam",
-      "Shivamgre"
-    ],
-    "hasCopy": "no"
-  },
-  "81697b269af382059945c3d758f3aedf42f43ef13cb6547318a27a2cee90d422": {
-    "file_name": "files/testMID.gif",
-    "file_size": 1.83,
-    "file_id": "81697b269af382059945c3d758f3aedf42f43ef13cb6547318a27a2cee90d422",
-    "file_owner": "tda",
-    "file_timestamp": 1744167588.0,
-    "peers": [
-      "Hawk"
-    ],
-    "hasCopy": "no",
-    "peers_with_file": [
-      "Shivam",
-      "Shivamgre",
-      "Hawk"
-    ]
-  },
-  "257337c335f815733c9ba638445e545ffe228d7389cf900a7cd95b2484be74bb": {
-    "file_name": "t4.txt",
-    "file_size": 0.0,
-    "file_id": "257337c335f815733c9ba638445e545ffe228d7389cf900a7cd95b2484be74bb",
-    "file_owner": "zagadatyaga",
-    "file_timestamp": 1744180719.0,
-    "peers": [
-      "zagadatyaga",
-      "pujarias"
-    ],
-    "hasCopy": "no",
-    "peers_with_file": [
-      "Shivam",
-      "Shivamgre"
-    ]
-  },
-  "713c4424ec89edb1da5ac8dc9dacaf0fa1478cab1857ec7c6198b9f0921583a0": {
-    "file_name": "a3test.txt",
-    "file_size": 9,
-    "file_id": "713c4424ec89edb1da5ac8dc9dacaf0fa1478cab1857ec7c6198b9f0921583a0",
-    "file_owner": "pujarias",
-    "file_timestamp": 1744167785.0,
-    "peers_with_file": [
-      "Shivam",
-      "Shivamgre"
-    ],
-    "hasCopy": "no"
-  },
-  "706ad2b55049cf7bc004d4f25309b1982655a99194ef60f74f8c4c559e059b39": {
-    "file_name": "t2.txt",
-    "file_size": 0.0,
-    "file_id": "706ad2b55049cf7bc004d4f25309b1982655a99194ef60f74f8c4c559e059b39",
-    "file_owner": "zagadatyaga",
-    "file_timestamp": 1744181339.0,
-    "peers_with_file": [
-      "Shivam",
-      "Shivamgre"
+      "shivam",
+      "Eagle",
+      "Zephyr"
     ],
     "hasCopy": "no"
   },
@@ -309,109 +243,160 @@
     "file_owner": "kashifm",
     "file_timestamp": 1744181380.0,
     "peers_with_file": [
-      "Shivam",
-      "Shivamgre"
+      "shivam",
+      "Eagle"
     ],
     "hasCopy": "no"
   },
-  "b1a9f4fd9e75cd1a975ec3d6294c154e731f3b802a4c67b920823bf497f5ab81": {
-    "file_name": "arsenal.txt",
-    "file_size": 0.01,
-    "file_id": "b1a9f4fd9e75cd1a975ec3d6294c154e731f3b802a4c67b920823bf497f5ab81",
-    "file_owner": "kashifm",
-    "file_timestamp": 1744182120.0,
-    "peers": [
-      "kashifm"
-    ],
-    "hasCopy": "no",
+  "1e95bc5e4036555ac679794ec02db1e2a8fb823ae7d8313b7085a8e059d967d9": {
+    "file_name": "LeBron_James_Runaway.mp4",
+    "file_size": 8.305978775024414,
+    "file_id": "1e95bc5e4036555ac679794ec02db1e2a8fb823ae7d8313b7085a8e059d967d9",
+    "file_owner": "ulepa",
+    "file_timestamp": 1744191306.0,
     "peers_with_file": [
-      "Shivam",
-      "Shivamgre"
-    ]
+      "shivam",
+      "Eagle",
+      "Zephyr"
+    ],
+    "hasCopy": "no"
   },
-  "c31d56777187655e7de8d31986cd648df4a84c12ea517ae9ed11bfa77a26c0f8": {
-    "file_name": "jamesk1.txt",
+  "ad89bba529d603ae61659b20696b10fe3712fb3f52b210a897e7d067c3ac21cf": {
+    "file_name": "push_test.txt",
     "file_size": 0.0,
-    "file_id": "c31d56777187655e7de8d31986cd648df4a84c12ea517ae9ed11bfa77a26c0f8",
-    "file_owner": "kashifm",
-    "file_timestamp": 1744175866.0,
+    "file_id": "ad89bba529d603ae61659b20696b10fe3712fb3f52b210a897e7d067c3ac21cf",
+    "file_owner": "zhangr14",
+    "file_timestamp": 1744231997.0,
     "peers_with_file": [
-      "Shivam",
-      "Shivamgre"
+      "shivam",
+      "Eagle",
+      "Zephyr"
     ],
     "hasCopy": "no"
   },
-  "987aa2dca4efe2aa4a08fc3e7912a097d917c77f6ad20dd3e85e0fd4da75e881": {
-    "file_name": "saulo-profile-s.jpeg",
+  "file_id": {
+    "file_name": "file_name",
+    "file_size": 0.0048370361328125,
+    "file_id": "file_id",
+    "file_owner": "hello",
+    "file_timestamp": 1744232643.0,
+    "peers_with_file": [
+      "shivam",
+      "Zephyr"
+    ],
+    "hasCopy": "no"
+  },
+  "b324955e3951faabd948733ac5536698f8715023085c7251d9a59d5acb58ad74": {
+    "file_name": "test123.txt",
+    "file_size": 7,
+    "file_id": "b324955e3951faabd948733ac5536698f8715023085c7251d9a59d5acb58ad74",
+    "file_owner": "test123",
+    "file_timestamp": 1744232112.0,
+    "peers": "test123",
+    "peers_with_file": [
+      "shivam"
+    ],
+    "hasCopy": "no"
+  },
+  "c195e3a88067c512c1cd51469eadfca33d871a020dfa45f4c5c2f4f2e6d12632": {
+    "file_name": "sololevling.jpeg",
+    "file_size": 1.04,
+    "file_id": "c195e3a88067c512c1cd51469eadfca33d871a020dfa45f4c5c2f4f2e6d12632",
+    "file_owner": "Zephyr",
+    "file_timestamp": 1744232174.0,
+    "peers": [
+      "Zephyr"
+    ],
+    "peers_with_file": [
+      "shivam",
+      "Zephyr"
+    ],
+    "hasCopy": "no"
+  },
+  "dda396a10d46724a37ae6240bb84db63f62dc1b3df703611835391da66156672": {
+    "file_name": "onepiece.jpg",
     "file_size": 0.02,
-    "file_id": "987aa2dca4efe2aa4a08fc3e7912a097d917c77f6ad20dd3e85e0fd4da75e881",
-    "file_owner": "kashifm",
-    "file_timestamp": 1744176278.0,
+    "file_id": "dda396a10d46724a37ae6240bb84db63f62dc1b3df703611835391da66156672",
+    "file_owner": "Zephyr",
+    "file_timestamp": 1744232174.0,
+    "peers": [
+      "Zephyr"
+    ],
     "peers_with_file": [
-      "Shivam",
-      "Shivamgre"
+      "shivam",
+      "Zephyr"
     ],
     "hasCopy": "no"
   },
-  "e277e73fdb163b857cebe2ad8c4f66bdd18b2af6cdae79e776f8232483bd77a2": {
-    "file_name": "image.png",
-    "file_size": 2.2,
-    "file_id": "e277e73fdb163b857cebe2ad8c4f66bdd18b2af6cdae79e776f8232483bd77a2",
-    "file_owner": "kashifm",
-    "file_timestamp": 1744176525.0,
+  "ea88664e4a96982c7152a0d0c8659761a8f1e7f63e2fa55104cd11c908298c36": {
+    "file_name": "feminist_manifesto.txt",
+    "file_size": 95,
+    "file_id": "ea88664e4a96982c7152a0d0c8659761a8f1e7f63e2fa55104cd11c908298c36",
+    "file_owner": "rizviz",
+    "file_timestamp": 1744210162,
     "peers_with_file": [
-      "Shivam",
-      "Shivamgre"
+      "rizviz",
+      "shivam"
     ],
     "hasCopy": "no"
   },
-  "c45a1f97287f3b5d306b4c22ecc90fcc2637a57d514efcee589e39d30fee0277": {
-    "file_name": "bitcoin.pdf",
-    "file_size": 0.18,
-    "file_id": "c45a1f97287f3b5d306b4c22ecc90fcc2637a57d514efcee589e39d30fee0277",
-    "file_owner": "kashifm",
-    "file_timestamp": 1744178801.0,
+  "e2177394185bc816312a380c285562ae098e9864f7526fcf87d32b1cdb8f4b3b": {
+    "file_name": "imsotired.txt",
+    "file_size": 9,
+    "file_id": "e2177394185bc816312a380c285562ae098e9864f7526fcf87d32b1cdb8f4b3b",
+    "file_owner": "rizviz",
+    "file_timestamp": 1744225162,
     "peers_with_file": [
-      "Shivam",
-      "Shivamgre"
+      "rizviz",
+      "shivam"
     ],
     "hasCopy": "no"
   },
-  "de6737ccbc8c99431223a39ca5cf69fbe1e0c30b5c4a9193b80119caeef73623": {
-    "file_name": "arsenal.txt",
-    "file_size": 0.01,
-    "file_id": "de6737ccbc8c99431223a39ca5cf69fbe1e0c30b5c4a9193b80119caeef73623",
-    "file_owner": "kashifm",
-    "file_timestamp": 1744182152,
+  "d0c510a27864f591d4eb4a0b8c708aa3cc7afc6bf845957083e2a7e5282a3d40": {
+    "file_name": "tset.txt",
+    "file_size": 997,
+    "file_id": "d0c510a27864f591d4eb4a0b8c708aa3cc7afc6bf845957083e2a7e5282a3d40",
+    "file_owner": "rizviz",
+    "file_timestamp": 1744225059,
     "peers_with_file": [
-      "Shivam",
-      "Shivamgre",
-      "Silicon"
+      "rizviz",
+      "shivam"
     ],
     "hasCopy": "no"
   },
-  "e18d5c2c45ea67532b62a69a1d7df61565e6404bb21b7105b8614311300d0e42": {
-    "file_name": "arsenal.txt",
-    "file_size": 0.01,
-    "file_id": "e18d5c2c45ea67532b62a69a1d7df61565e6404bb21b7105b8614311300d0e42",
-    "file_owner": "kashifm",
-    "file_timestamp": 1744182280,
-    "hasCopy": "yes",
+  "854e3b329dc4ed6471b563cb7853b1cacff2e4df6cfcdec99c4fdf01edb1052e": {
+    "file_name": "hello! this is zahra.",
+    "file_size": 21,
+    "file_id": "854e3b329dc4ed6471b563cb7853b1cacff2e4df6cfcdec99c4fdf01edb1052e",
+    "file_owner": "rizviz",
+    "file_timestamp": 1744049842,
     "peers_with_file": [
-      "kashifm",
-      "Shivamgre",
-      "Shivam"
-    ]
+      "rizviz",
+      "shivam"
+    ],
+    "hasCopy": "no"
   },
-  "f18a3e069a73a057b37d3bc665983cf85a4bfc45786528686e194e0319cccb6a": {
-    "file_name": "arch.png",
-    "file_size": 0.16802024841308594,
-    "file_id": "f18a3e069a73a057b37d3bc665983cf85a4bfc45786528686e194e0319cccb6a",
-    "file_owner": "Shivamgre",
-    "file_timestamp": 1744182356.8105109,
+  "ba9209378135891a9d6f047e1f5ed0319134013877f5192ba04aab4f3786b962": {
+    "file_name": "Kobe_Bryant_LIKE_WEEZY.mp4",
+    "file_size": 6522072,
+    "file_id": "ba9209378135891a9d6f047e1f5ed0319134013877f5192ba04aab4f3786b962",
+    "file_owner": "rizviz",
+    "file_timestamp": 1744230313,
     "peers_with_file": [
-      "Shivam",
-      "Shivamgre"
+      "rizviz",
+      "shivam"
+    ],
+    "hasCopy": "no"
+  },
+  "de7811b32670bd2acfdc3d1884d5ed5f89ae668e0f15a3c06373639ac7d53e5f": {
+    "file_name": "a3test.txt",
+    "file_size": 9,
+    "file_id": "de7811b32670bd2acfdc3d1884d5ed5f89ae668e0f15a3c06373639ac7d53e5f",
+    "file_owner": "rizviz",
+    "file_timestamp": 1744226106,
+    "peers_with_file": [
+      "rizviz",
+      "shivam"
     ],
     "hasCopy": "no"
   }

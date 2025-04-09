@@ -73,7 +73,7 @@ def scan_storage_folder():
             content = f.read()
         stat = os.stat(fpath)
         timestamp = int(stat.st_mtime)
-        size = len(content) // (1024 * 1024)  # integer MB
+        size = round(len(content) / (1024 * 1024), 2)  # float MB with 2 decimals
 
         h = hashlib.sha256()
         h.update(content)
@@ -376,7 +376,7 @@ def handle_push_command(file_path):
         with open(file_path, "rb") as f:
             content = f.read()
         file_name = os.path.basename(file_path)
-        file_size = len(content) // (1024 * 1024)
+        file_size = round(len(content) / (1024 * 1024), 2)
         timestamp = int(time.time())
         file_id = hashlib.sha256(content + str(timestamp).encode()).hexdigest()
 

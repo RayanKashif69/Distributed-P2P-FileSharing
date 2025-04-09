@@ -403,6 +403,10 @@ def handle_message(conn, addr, msg):
             print(f"[{peer_id}] Received ANNOUNCE for {msg.get('file_name')}")
             handle_announce(msg)
 
+        elif msg["type"] == "DELETE":
+            print(f"[{peer_id}] Received DELETE for {msg.get('file_name')}")
+            handle_delete(msg)
+
         else:
             print(f"[{peer_id}] Received unknown message type: {msg['type']}")
     else:
@@ -805,7 +809,10 @@ def handle_cli_command(cmd):
             print(f"[{peer_id}] Usage: delete <file_id>")
             return
         handle_delete_command(tokens[1])
-
+    elif cmd == "exit":
+        print(f"[{peer_id}] Shutting down peer.")
+        save_metadata()
+        sys.exit(0)
     else:
         print(f"[{peer_id}] Unknown command: {cmd}")
 

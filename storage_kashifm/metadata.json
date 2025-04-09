@@ -7,8 +7,10 @@
     "file_timestamp": 1743801128,
     "peers_with_file": [
       "sbedi",
+      "Silicon",
       "Grebe",
-      "Silicon"
+      "Shivam",
+      "Eagle"
     ],
     "hasCopy": "no"
   },
@@ -20,9 +22,12 @@
     "file_timestamp": 1743988884.0,
     "peers_with_file": [
       "sbedi",
-      "Grebe",
       "Hawk",
-      "Silicon"
+      "Silicon",
+      "Grebe",
+      "Shivam",
+      "Eagle",
+      "autofetch"
     ],
     "hasCopy": "no"
   },
@@ -34,8 +39,11 @@
     "file_timestamp": 1744007783.0,
     "peers_with_file": [
       "sbedi",
+      "Hawk",
       "Grebe",
-      "Hawk"
+      "Shivam",
+      "Eagle",
+      "steph"
     ],
     "hasCopy": "no"
   },
@@ -46,7 +54,9 @@
     "file_owner": "prokopie",
     "file_timestamp": 1744167591.0,
     "peers_with_file": [
-      "sbedi"
+      "sbedi",
+      "Shivam",
+      "Eagle"
     ],
     "hasCopy": "no"
   },
@@ -58,12 +68,15 @@
     "file_timestamp": 1743466870.0,
     "peers_with_file": [
       "sbedi",
-      "Grebe",
       "Hawk",
       "Silicon",
-      "testkk"
+      "testkk",
+      "Grebe",
+      "kashifm",
+      "Shivam",
+      "Eagle"
     ],
-    "hasCopy": "no"
+    "hasCopy": "yes"
   },
   "411e61253244b35831e17f02fe9f1ae7b4699239d7e6edd218fc970f91a0bc88": {
     "file_name": "image.png",
@@ -74,7 +87,10 @@
     "peers_with_file": [
       "sbedi",
       "Hawk",
-      "kashifm"
+      "kashifm",
+      "Shivam",
+      "Eagle",
+      "autofetch"
     ],
     "hasCopy": "yes"
   },
@@ -86,9 +102,11 @@
     "file_timestamp": 1743466903.0,
     "peers_with_file": [
       "sbedi",
-      "Grebe",
       "Hawk",
-      "Silicon"
+      "Silicon",
+      "Grebe",
+      "Shivam",
+      "Eagle"
     ],
     "hasCopy": "no"
   },
@@ -217,8 +235,10 @@
     "file_timestamp": 1744057384,
     "peers_with_file": [
       "sbedi",
+      "Silicon",
       "Grebe",
-      "Silicon"
+      "Shivam",
+      "Eagle"
     ],
     "hasCopy": "no"
   },
@@ -230,7 +250,8 @@
     "file_timestamp": 1744167785,
     "peers_with_file": [
       "sbedi",
-      "Silicon"
+      "Silicon",
+      "Shivam"
     ],
     "hasCopy": "no"
   },
@@ -242,7 +263,8 @@
     "file_timestamp": 1744168091,
     "peers_with_file": [
       "sbedi",
-      "Silicon"
+      "Silicon",
+      "Shivam"
     ],
     "hasCopy": "no"
   },
@@ -253,7 +275,9 @@
     "file_owner": "jamesk1",
     "file_timestamp": 1744132987,
     "peers_with_file": [
-      "sbedi"
+      "sbedi",
+      "Shivam",
+      "Eagle"
     ],
     "hasCopy": "no"
   },
@@ -265,7 +289,9 @@
     "file_timestamp": 1744160881,
     "peers_with_file": [
       "sbedi",
-      "testkk"
+      "testkk",
+      "Shivam",
+      "Eagle"
     ],
     "hasCopy": "no"
   },
@@ -276,7 +302,10 @@
     "file_owner": "prokopie",
     "file_timestamp": 1744165614,
     "peers_with_file": [
-      "sbedi"
+      "sbedi",
+      "Shivam",
+      "Eagle",
+      "steph"
     ],
     "hasCopy": "no"
   },
@@ -287,7 +316,9 @@
     "file_owner": "prokopie",
     "file_timestamp": 1744168730,
     "peers_with_file": [
-      "sbedi"
+      "sbedi",
+      "Shivam",
+      "Eagle"
     ],
     "hasCopy": "no"
   },
@@ -299,7 +330,8 @@
     "file_timestamp": 1744175520,
     "peers_with_file": [
       "rizviz",
-      "kashifm"
+      "kashifm",
+      "Shivam"
     ],
     "hasCopy": "yes"
   },
@@ -323,7 +355,8 @@
     "peers_with_file": [
       "sbedi",
       "kashifm",
-      "Grebe"
+      "Grebe",
+      "Shivam"
     ],
     "hasCopy": "yes"
   },
@@ -336,7 +369,8 @@
     "hasCopy": "yes",
     "peers_with_file": [
       "kashifm",
-      "sbedi"
+      "sbedi",
+      "Shivam"
     ]
   },
   "952fe62f1779161c438ad11330cce0c3d22444edc454c021da571d8d63a01009": {
@@ -357,7 +391,9 @@
     "file_owner": "tda",
     "file_timestamp": 1744167588,
     "peers_with_file": [
-      "Hawk"
+      "Hawk",
+      "Shivam",
+      "autofetch"
     ],
     "hasCopy": "no"
   },
@@ -392,6 +428,76 @@
     "peers_with_file": [
       "rizviz"
     ],
+    "hasCopy": "no"
+  },
+  "4199df755c9adef3c1765b57133bb7c0cd27883b206fed8695c6b21ebc24feb7": {
+    "file_name": "barcelona.png",
+    "file_size": 0,
+    "file_id": "4199df755c9adef3c1765b57133bb7c0cd27883b206fed8695c6b21ebc24feb7",
+    "file_owner": "kashifm",
+    "file_timestamp": 1744178142,
+    "hasCopy": "yes",
+    "peers_with_file": [
+      "kashifm",
+      "Shivam",
+      "Eagle"
+    ]
+  },
+  "e3f5c20f591b42b7561cf3ca9150bda8058e8c0356e2845fe529f95d66f80470": {
+    "file_name": "sololevling.jpeg",
+    "file_size": 1.04,
+    "file_id": "e3f5c20f591b42b7561cf3ca9150bda8058e8c0356e2845fe529f95d66f80470",
+    "file_owner": "Zephyr",
+    "file_timestamp": "2025-04-09 00:55:41",
+    "peers": [
+      "Zephyr"
+    ],
+    "peers_with_file": [],
+    "hasCopy": "no"
+  },
+  "4bb4650bb79bcca055c799827622befe2204bea115b99e381501a3bf31f23b93": {
+    "file_name": "onepiece.jpg",
+    "file_size": 0.02,
+    "file_id": "4bb4650bb79bcca055c799827622befe2204bea115b99e381501a3bf31f23b93",
+    "file_owner": "Zephyr",
+    "file_timestamp": "2025-04-09 00:55:41",
+    "peers": [
+      "Zephyr"
+    ],
+    "peers_with_file": [],
+    "hasCopy": "no"
+  },
+  "dc5f59588a315fb8fde305276a8bf3cca34540f97b498c4a691cb82904a42ba8": {
+    "file_name": "sololevling.jpeg",
+    "file_size": 1.04,
+    "file_id": "dc5f59588a315fb8fde305276a8bf3cca34540f97b498c4a691cb82904a42ba8",
+    "file_owner": "Zephyr",
+    "file_timestamp": "2025-04-09 00:59:36",
+    "peers": [
+      "Zephyr"
+    ],
+    "peers_with_file": [],
+    "hasCopy": "no"
+  },
+  "a187235371cb28b66e07fe053d272d2bd6eb74b7a90f0228ceba9650c738b224": {
+    "file_name": "onepiece.jpg",
+    "file_size": 0.02,
+    "file_id": "a187235371cb28b66e07fe053d272d2bd6eb74b7a90f0228ceba9650c738b224",
+    "file_owner": "Zephyr",
+    "file_timestamp": "2025-04-09 00:59:36",
+    "peers": [
+      "Zephyr"
+    ],
+    "peers_with_file": [],
+    "hasCopy": "no"
+  },
+  "38fdbc2528e97a2c8cbcbd66501d3df020da015dda7d402db4bdbb63635cf57c": {
+    "file_name": "second.txt",
+    "file_size": 0.0023956298828125,
+    "file_id": "38fdbc2528e97a2c8cbcbd66501d3df020da015dda7d402db4bdbb63635cf57c",
+    "file_owner": "sleeppig",
+    "file_timestamp": 1744178799.4676554,
+    "peers_with_file": [],
     "hasCopy": "no"
   }
 }

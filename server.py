@@ -718,19 +718,24 @@ def handle_get_file_cli(file_id):
 
 
 def auto_fetch_files_on_startup():
-
-    time.sleep(10)  # Give some time for the network to stabilize
-
     print(f"[{peer_id}] Attempting to auto-fetch 3 files from the network...")
+
+    # Get list of file_ids we don't have
     missing_files = [
-        fid
-        for fid, meta in file_metadata.items()
-        if meta["hasCopy"] == "no" and meta["peers_with_file"]
+        fid for fid, meta in file_metadata.items() if meta.get("hasCopy") != "yes"
     ]
-    random.shuffle(missing_files)
-    for fid in missing_files[:3]:
+
+    if not missing_files:
+        print(f"[{peer_id}] No missing files to fetch.")
+        return
+
+    # Pick up to 3 file_ids randomly
+    to_fetch = random.sample(missing_files, min(3, len(missing_files)))
+
+    for fid in to_fetch:
         print(f"[{peer_id}] Auto-fetching file ID: {fid}")
         handle_get_file_cli(fid)
+        time.sleep(1)  # small delay between fetches to avoid spamming
 
 
 # handle DELETE command from CLI
@@ -947,6 +952,8 @@ if __name__ == "__main__":
     send_gossip(
         well_known_host, well_known_port
     )  # send initial gossip to well-known host
+
+    time.sleep(7)  # wait for gossip replies
 
     auto_fetch_files_on_startup()
 

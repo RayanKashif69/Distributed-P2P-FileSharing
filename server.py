@@ -704,6 +704,9 @@ def handle_get_file_cli(file_id):
                     f"[{peer_id}] Successfully downloaded '{fname}' from {peer_id_candidate}"
                 )
                 found = True
+                # announce the file
+                announce_new_file(file_id)
+
                 break
 
         except Exception as e:
@@ -712,6 +715,25 @@ def handle_get_file_cli(file_id):
 
     if not found:
         print(f"[{peer_id}] Could not retrieve file from any available peer.")
+
+
+def auto_fetch_files_on_startup():
+    print(f"[{peer_id}] Attempting to auto-fetch 3 files from the network...")
+
+    candidates = [
+        fid for fid, meta in file_metadata.items() if meta.get("hasCopy") != "yes"
+    ]
+
+    if not candidates:
+        print(f"[{peer_id}] No missing files to fetch on startup.")
+        return
+
+    # Pick up to 3 random missing files
+    files_to_fetch = random.sample(candidates, min(3, len(candidates)))
+
+    for file_id in files_to_fetch:
+        print(f"[{peer_id}] Auto-fetching file ID: {file_id}")
+        handle_get_file_cli(file_id)  # This already saves and announces the file
 
 
 # handle DELETE command from CLI
@@ -925,9 +947,14 @@ if __name__ == "__main__":
     start_http_server()  # Add this
 
     #  Continue with rest of setup
-    send_gossip(well_known_host, well_known_port)
-    start_gossip_loop()
-    start_cleanup_loop()
+    send_gossip(
+        well_known_host, well_known_port
+    )  # send initial gossip to well-known host
+
+    auto_fetch_files_on_startup()
+
+    start_gossip_loop()  # re gossip
+    start_cleanup_loop()  # clean up tracked peers
 
     print(f"\n[{peer_id}] Command Options:")
     print("Use 'list'                     to view available files")

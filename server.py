@@ -261,7 +261,7 @@ def handle_get_file(conn, file_id):
     except Exception as e:
         print(f"[{peer_id}] Error reading/sending file: {e}")
 
-
+# get metadata of files that have a copy
 def get_gossip_reply_metadata():
     reply_files = []
     for file in file_metadata.values():
@@ -275,33 +275,98 @@ def get_gossip_reply_metadata():
                     "file_timestamp": file["file_timestamp"],
                 }
             )
-   #  print(f"[{peer_id}] GOSSIP_REPLY will include {len(reply_files)} file(s).")
+    #  print(f"[{peer_id}] GOSSIP_REPLY will include {len(reply_files)} file(s).")
     return reply_files
+
+# handle ANNOUNCE message and update the metadata
+def handle_announce(msg):
+    file_id = msg["file_id"]
+
+    if file_id in file_metadata:
+        # Update peers_with_file
+        if msg["from"] not in file_metadata[file_id]["peers_with_file"]:
+            file_metadata[file_id]["peers_with_file"].append(msg["from"])
+        return
+
+    # Add new file metadata
+    file_metadata[file_id] = {
+        "file_name": msg["file_name"],
+        "file_size": msg["file_size"],
+        "file_id": file_id,
+        "file_owner": msg["file_owner"],
+        "file_timestamp": msg["file_timestamp"],
+        "hasCopy": "no",
+        "peers_with_file": [msg["from"]],
+    }
+
+    save_metadata()
+    print(f"[{peer_id}] Announced new file '{msg['file_name']}' from {msg['from']}")
+
+
+# handle FILE_DATA message and save the file locally
+# and update the metadata
+def handle_file_data(msg):
+    file_id = msg["file_id"]
+    file_name = msg["file_name"]
+    file_owner = msg["file_owner"]
+    file_timestamp = msg["file_timestamp"]
+    file_size = msg["file_size"]
+    encoded_data = msg["data"]
+
+    try:
+        # Decode the hex data
+        content = bytes.fromhex(encoded_data)
+
+        # Save the file locally
+        with open(os.path.join(base_path, file_name), "wb") as f:
+            f.write(content)
+
+        # Update metadata
+        file_metadata[file_id] = {
+            "file_name": file_name,
+            "file_size": round(file_size / (1024 * 1024), 2),  # convert to MB
+            "file_id": file_id,
+            "file_owner": file_owner,
+            "file_timestamp": file_timestamp,
+            "hasCopy": "yes",
+            "peers_with_file": [peer_id],
+        }
+
+        save_metadata()
+
+        print(f"[{peer_id}] Received and saved file '{file_name}' (ID: {file_id})")
+
+        # ANNOUNCE to all other peers
+        announce_new_file(file_id)
+
+    except Exception as e:
+        print(f"[{peer_id}] Failed to process FILE_DATA: {e}")
 
 
 # here all the messages are handled
 def handle_message(conn, addr, msg):
     """
     Process the incoming message based on its type.
-    handle different message types (e.g., GOSSIP, GOSSIP_REPLY, etc.)
+    Handle different message types (e.g., GOSSIP, GOSSIP_REPLY, etc.)
     """
-    # For example, check the type of the message
     if "type" in msg:
         if msg["type"] == "GOSSIP":
-
-            # Process GOSSIP message
-            # print(f"[{peer_id}] Handling GOSSIP message from {msg.get('peerId')}")
-            # print(f"[{peer_id}] Full GOSSIP received:\n{json.dumps(msg, indent=2)}")
             handle_gossip(msg)
 
         elif msg["type"] == "GOSSIP_REPLY":
-
-            # print(f"[{peer_id}] Handling GOSSIP_REPLY from {msg.get('peerId')}")
             handle_gossip_reply(msg)
 
         elif msg["type"] == "GET_FILE":
             print(f"[{peer_id}] Received GET_FILE request for {msg.get('file_id')}")
             handle_get_file(conn, msg["file_id"])
+
+        elif msg["type"] == "FILE_DATA":
+            print(f"[{peer_id}] Received FILE_DATA for {msg.get('file_name')}")
+            handle_file_data(msg)
+
+        elif msg["type"] == "ANNOUNCE":
+            print(f"[{peer_id}] Received ANNOUNCE for {msg.get('file_name')}")
+            handle_announce(msg)
 
         else:
             print(f"[{peer_id}] Received unknown message type: {msg['type']}")

@@ -695,7 +695,8 @@ def generate_stats_page():
                 f"<td>{peers_str}</td></tr>"
             )
         except Exception as e:
-            print(f" Error rendering row for {fid}: {e}")
+           #  print(f" Error rendering row for {fid}: {e}")
+           pass
     html += "</table>"
 
     html += "</body></html>"

@@ -13,6 +13,8 @@ import threading
 import os
 import datetime
 
+lock = threading.Lock()
+
 # --- Parse CLI Arguments ---
 if len(sys.argv) != 5:
     print("Usage: python p2p_filesharing.py <peer_id> <host> <p2p_port> <http_port>")
@@ -317,14 +319,19 @@ def announce_new_file(file_id):
         "file_timestamp": entry["file_timestamp"],
     }
 
-    for pid, pinfo in tracked_peers.items():
-        try:
-            with socket.create_connection(
-                (pinfo["host"], pinfo["port"]), timeout=5
-            ) as sock:
-                sock.sendall(json.dumps(msg).encode())
-        except:
-            continue  # silently ignore for now
+    with lock:
+        for pid, pinfo in list(tracked_peers.items()):
+            try:
+                with socket.create_connection(
+                    (pinfo["host"], pinfo["port"]), timeout=5
+                ) as sock:
+                    sock.sendall(json.dumps(msg).encode())
+            except:
+                continue  # Fail silently
+
+    print(
+        f"[{peer_id}] Announced new file '{entry['file_name']}' to all tracked peers."
+    )
 
 
 def push_to_random_peer(file_id, file_name, content, file_size, timestamp):
@@ -339,13 +346,14 @@ def push_to_random_peer(file_id, file_name, content, file_size, timestamp):
         "data": encoded,
     }
 
-    eligible_peers = [p for p in tracked_peers if p != peer_id]
-    if not eligible_peers:
-        print(f"[{peer_id}] No peers to push the file to.")
-        return
+    with lock:
+        eligible_peers = [p for p in tracked_peers if p != peer_id]
+        if not eligible_peers:
+            print(f"[{peer_id}] No peers to push the file to.")
+            return
 
-    selected_peer = random.choice(eligible_peers)
-    peer_info = tracked_peers[selected_peer]
+        selected_peer = random.choice(eligible_peers)
+        peer_info = tracked_peers[selected_peer]
 
     try:
         with socket.create_connection(
@@ -366,7 +374,7 @@ def handle_push_command(file_path):
         with open(file_path, "rb") as f:
             content = f.read()
         file_name = os.path.basename(file_path)
-        file_size = len(content)
+        file_size = len(content) // (1024 * 1024)
         timestamp = int(time.time())
         file_id = hashlib.sha256(content + str(timestamp).encode()).hexdigest()
 

@@ -118,7 +118,8 @@ def send_gossip(to_host, to_port):
         # print(f"[{peer_id}] Sent GOSSIP to {to_host}:{to_port}")
         seen_gossip_ids.add(gossip_id)  # Mark it as seen so we don't rebroadcast
     except Exception as e:
-        print(f"[{peer_id}] Failed to send GOSSIP to {to_host}:{to_port}: {e}")
+        # print(f"[{peer_id}] Failed to send GOSSIP to {to_host}:{to_port}: {e}")
+        pass
 
 
 # handling GOSSIP_REPLY message I receive from other peers
@@ -202,7 +203,8 @@ def handle_gossip(msg):
             sock.sendall(json.dumps(reply).encode())
     #    print(f"[{peer_id}] Sent GOSSIP_REPLY to {sender_id}")
     except Exception as e:
-        print(f"[{peer_id}] Failed to send GOSSIP_REPLY to {sender_id}: {e}")
+        # print(f"[{peer_id}] Failed to send GOSSIP_REPLY to {sender_id}: {e}")
+        pass
 
     # 4. Forward GOSSIP to random peers
     eligible_peers = [p for p in tracked_peers if p != sender_id and p != peer_id]

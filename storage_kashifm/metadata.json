@@ -5,22 +5,10 @@
     "file_id": "aa3d87025fe45ff8af821a03f73590c75bb832ec20c4e6690a66cc105ed02953",
     "file_owner": "bedis3",
     "file_timestamp": 1743801128,
-    "peers": [
-      "sbedi",
-      "Silicon",
-      "Eagle",
-      "Grebe",
-      "jamesk1",
-      "santosan2",
-      "patelhs",
-      "sanons"
-    ],
     "peers_with_file": [
-      "jamesk1",
-      "Eagle",
-      "Silicon",
       "sbedi",
-      "Grebe"
+      "Grebe",
+      "Silicon"
     ],
     "hasCopy": "no"
   },
@@ -30,126 +18,35 @@
     "file_id": "98134faf55ea208b8c74536e25bf17f66205b3ea512ca9f0548b154e2bc0783e",
     "file_owner": "7913482",
     "file_timestamp": 1743988884.0,
-    "peers": [
+    "peers_with_file": [
       "sbedi",
-      "Silicon",
-      "Eagle",
       "Grebe",
       "Hawk",
-      "jamesk1",
-      "patelhs",
-      "sanons"
-    ],
-    "peers_with_file": [
-      "jamesk1",
-      "Eagle",
-      "Silicon",
-      "sbedi",
-      "Hawk",
-      "Grebe"
+      "Silicon"
     ],
     "hasCopy": "no"
   },
-  "8793adf34e106d5b5e3b8a55262f5310caefe61441b99c06179f5cebf00228df": {
-    "file_name": "KrabbyPattySecretFormula.txt",
-    "file_size": 4.673004150390625e-05,
-    "file_id": "8793adf34e106d5b5e3b8a55262f5310caefe61441b99c06179f5cebf00228df",
-    "file_owner": "nguye89",
-    "file_timestamp": 1744057384,
-    "peers": [
-      "sbedi",
-      "Silicon",
-      "Eagle",
-      "Grebe",
-      "jamesk1",
-      "patelhs",
-      "sanons"
-    ],
+  "b201ac6b24ac5ea48d9c7e57cc0307d8e294420886733ff56dc4375ef95bc9ad": {
+    "file_name": "test.txt",
+    "file_size": 1.239776611328125e-05,
+    "file_id": "b201ac6b24ac5ea48d9c7e57cc0307d8e294420886733ff56dc4375ef95bc9ad",
+    "file_owner": "steph",
+    "file_timestamp": 1744007783.0,
     "peers_with_file": [
-      "jamesk1",
-      "Eagle",
-      "Silicon",
       "sbedi",
-      "Grebe"
+      "Grebe",
+      "Hawk"
     ],
     "hasCopy": "no"
   },
-  "3af4dd84e2189618d73964d27a0a297ea9564a236934db8901e6e812afc5651a": {
-    "file_name": "testfile.txt",
-    "file_size": 2.8e-05,
-    "file_id": "3af4dd84e2189618d73964d27a0a297ea9564a236934db8901e6e812afc5651a",
-    "file_owner": "amusatf",
-    "file_timestamp": 1743970142.6140459,
-    "peers": [
-      "sbedi",
-      "Silicon",
-      "Eagle",
-      "Grebe",
-      "Hawk",
-      "jamesk1",
-      "santosan2",
-      "patelhs",
-      "sanons"
-    ],
+  "958048d047574be7990d70dbe7ef8ee37fea72f1f55f76304553197e1e14c552": {
+    "file_name": "extraTest.txt",
+    "file_size": 123,
+    "file_id": "958048d047574be7990d70dbe7ef8ee37fea72f1f55f76304553197e1e14c552",
+    "file_owner": "prokopie",
+    "file_timestamp": 1744167591.0,
     "peers_with_file": [
-      "jamesk1",
-      "Eagle",
-      "Silicon",
-      "sbedi",
-      "Hawk",
-      "Grebe"
-    ],
-    "hasCopy": "no"
-  },
-  "3aacef16930f6ac23a456896ba4bf56f185d50f8c76b3449b8d5ad4f72ab9ffe": {
-    "file_name": "coolfile.txt",
-    "file_size": 9.059906005859375e-05,
-    "file_id": "3aacef16930f6ac23a456896ba4bf56f185d50f8c76b3449b8d5ad4f72ab9ffe",
-    "file_owner": "asd",
-    "file_timestamp": 1744080416,
-    "peers": [
-      "sbedi",
-      "Silicon",
-      "Eagle",
-      "Grebe",
-      "jamesk1",
-      "patelhs",
-      "sanons"
-    ],
-    "peers_with_file": [
-      "jamesk1",
-      "Eagle",
-      "Silicon",
-      "sbedi",
-      "Grebe"
-    ],
-    "hasCopy": "no"
-  },
-  "d3588eb4c9f2c097f68e00f07cf072aed41ce5957941eab4caf12ccad700df7e": {
-    "file_name": "names.txt",
-    "file_size": 0.0014142990112304688,
-    "file_id": "d3588eb4c9f2c097f68e00f07cf072aed41ce5957941eab4caf12ccad700df7e",
-    "file_owner": "Prof",
-    "file_timestamp": 1743466903,
-    "peers": [
-      "sbedi",
-      "Silicon",
-      "Eagle",
-      "Grebe",
-      "Hawk",
-      "jamesk1",
-      "santosan2",
-      "kashifm",
-      "patelhs",
-      "sanons"
-    ],
-    "peers_with_file": [
-      "jamesk1",
-      "Eagle",
-      "Silicon",
-      "sbedi",
-      "Hawk",
-      "Grebe"
+      "sbedi"
     ],
     "hasCopy": "no"
   },
@@ -158,25 +55,13 @@
     "file_size": 0.17575454711914062,
     "file_id": "b7f3b768aab110b36f4941c1d190798ceefc5fdf9ae33d45c7078dd5ad31092c",
     "file_owner": "Prof",
-    "file_timestamp": 1743466870,
-    "peers": [
+    "file_timestamp": 1743466870.0,
+    "peers_with_file": [
       "sbedi",
-      "Silicon",
-      "Eagle",
       "Grebe",
       "Hawk",
-      "jamesk1",
-      "santosan2",
-      "kashifm",
-      "sanons"
-    ],
-    "peers_with_file": [
-      "jamesk1",
-      "Eagle",
       "Silicon",
-      "sbedi",
-      "Hawk",
-      "Grebe"
+      "testkk"
     ],
     "hasCopy": "no"
   },
@@ -185,75 +70,111 @@
     "file_size": 2.2039670944213867,
     "file_id": "411e61253244b35831e17f02fe9f1ae7b4699239d7e6edd218fc970f91a0bc88",
     "file_owner": "Prof",
-    "file_timestamp": 1743466889,
-    "peers": [
-      "sbedi",
-      "Eagle",
-      "Hawk",
-      "jamesk1",
-      "santosan2",
-      "sanons"
-    ],
+    "file_timestamp": 1743466889.0,
     "peers_with_file": [
-      "jamesk1",
-      "Eagle",
       "sbedi",
       "Hawk",
       "kashifm"
     ],
     "hasCopy": "yes"
   },
-  "b201ac6b24ac5ea48d9c7e57cc0307d8e294420886733ff56dc4375ef95bc9ad": {
-    "file_name": "test.txt",
-    "file_size": 1.239776611328125e-05,
-    "file_id": "b201ac6b24ac5ea48d9c7e57cc0307d8e294420886733ff56dc4375ef95bc9ad",
-    "file_owner": "steph",
-    "file_timestamp": 1744007783,
-    "peers": [
+  "d3588eb4c9f2c097f68e00f07cf072aed41ce5957941eab4caf12ccad700df7e": {
+    "file_name": "names.txt",
+    "file_size": 0.0014142990112304688,
+    "file_id": "d3588eb4c9f2c097f68e00f07cf072aed41ce5957941eab4caf12ccad700df7e",
+    "file_owner": "Prof",
+    "file_timestamp": 1743466903.0,
+    "peers_with_file": [
       "sbedi",
-      "Eagle",
       "Grebe",
       "Hawk",
-      "jamesk1",
-      "patelhs",
-      "sanons"
-    ],
-    "peers_with_file": [
-      "jamesk1",
-      "Eagle",
-      "sbedi",
-      "Hawk",
-      "Grebe"
+      "Silicon"
     ],
     "hasCopy": "no"
   },
-  "079a711edfe1606d0f49b352a4d1639d976316aee3058ca6a09707b9125f8959": {
+  "7db644df32651f886ef207a8d518e33bbe7dbd3500bf833957698455599daa61": {
+    "file_name": "jamesk1.txt",
+    "file_size": 9,
+    "file_id": "7db644df32651f886ef207a8d518e33bbe7dbd3500bf833957698455599daa61",
+    "file_owner": null,
+    "file_timestamp": 1744175446.0,
+    "peers_with_file": [
+      "rizviz"
+    ],
+    "hasCopy": "no"
+  },
+  "31341975531cf504a094776889e2b97afa1dbded3b9894eaf971f436f8d27e4d": {
     "file_name": "names.txt",
     "file_size": 1483,
-    "file_id": "079a711edfe1606d0f49b352a4d1639d976316aee3058ca6a09707b9125f8959",
-    "file_owner": "rizviz",
-    "file_timestamp": 1744160024,
-    "peers": [
-      "rizviz",
-      "jamesk1"
-    ],
+    "file_id": "31341975531cf504a094776889e2b97afa1dbded3b9894eaf971f436f8d27e4d",
+    "file_owner": null,
+    "file_timestamp": 1744167140.0,
     "peers_with_file": [
-      "jamesk1"
+      "rizviz"
     ],
     "hasCopy": "no"
   },
-  "e8739834683e2ac8fc5bdd5169a4cb58f8126e84ddc5060be186acda541f4b39": {
+  "613a6e361f88edb4ea50d302ece3cd1e5724f9cb0464606502c23519617cd5d7": {
+    "file_name": "server1.py",
+    "file_size": 5886,
+    "file_id": "613a6e361f88edb4ea50d302ece3cd1e5724f9cb0464606502c23519617cd5d7",
+    "file_owner": null,
+    "file_timestamp": 1744167118.0,
+    "peers_with_file": [
+      "rizviz"
+    ],
+    "hasCopy": "no"
+  },
+  "d29a87ae54e026304d37cddeec1687700fa106faf1476368df1c7a440f4cef87": {
+    "file_name": "saulo-profile-s.jpeg",
+    "file_size": 20511,
+    "file_id": "d29a87ae54e026304d37cddeec1687700fa106faf1476368df1c7a440f4cef87",
+    "file_owner": null,
+    "file_timestamp": 1744175387.0,
+    "peers_with_file": [],
+    "hasCopy": "no"
+  },
+  "4fcd1d6074ab27f89f2a650a06e80cb62519324b25932eae32aa2c0ef9c9a5e2": {
+    "file_name": "test.txt",
+    "file_size": 13,
+    "file_id": "4fcd1d6074ab27f89f2a650a06e80cb62519324b25932eae32aa2c0ef9c9a5e2",
+    "file_owner": null,
+    "file_timestamp": 1744175398.0,
+    "peers_with_file": [
+      "rizviz"
+    ],
+    "hasCopy": "no"
+  },
+  "a6acc37ffbd910da79f985f5c2a6c0f10f6d30466ccb78d73684a6f31322e86b": {
     "file_name": "KrabbyPattySecretFormula.txt",
     "file_size": 49,
-    "file_id": "e8739834683e2ac8fc5bdd5169a4cb58f8126e84ddc5060be186acda541f4b39",
-    "file_owner": "rizviz",
-    "file_timestamp": 1744159939,
-    "peers": [
-      "rizviz",
-      "jamesk1"
-    ],
+    "file_id": "a6acc37ffbd910da79f985f5c2a6c0f10f6d30466ccb78d73684a6f31322e86b",
+    "file_owner": null,
+    "file_timestamp": 1744166850.0,
     "peers_with_file": [
-      "jamesk1"
+      "rizviz"
+    ],
+    "hasCopy": "no"
+  },
+  "77c6b9e91e350573f9f4ef9369ece8b315d7c313f88d727c1c7977757b4e7a06": {
+    "file_name": "testTextFile.txt",
+    "file_size": 5450,
+    "file_id": "77c6b9e91e350573f9f4ef9369ece8b315d7c313f88d727c1c7977757b4e7a06",
+    "file_owner": null,
+    "file_timestamp": 1744167540.0,
+    "peers_with_file": [
+      "rizviz"
+    ],
+    "hasCopy": "no"
+  },
+  "4e0c33014011f54af3bee32604ce9dcd202322274fc27c8dd93612b83b58a4dc": {
+    "file_name": "bitcoin.pdf",
+    "file_size": 184292,
+    "file_id": "4e0c33014011f54af3bee32604ce9dcd202322274fc27c8dd93612b83b58a4dc",
+    "file_owner": null,
+    "file_timestamp": 1744166359.0,
+    "peers_with_file": [
+      "rizviz"
     ],
     "hasCopy": "no"
   },
@@ -261,46 +182,67 @@
     "file_name": "hello! this is zahra.",
     "file_size": 21,
     "file_id": "854e3b329dc4ed6471b563cb7853b1cacff2e4df6cfcdec99c4fdf01edb1052e",
-    "file_owner": "rizviz",
-    "file_timestamp": 1744049842,
-    "peers": [
-      "rizviz",
-      "jamesk1",
-      "sanons"
-    ],
+    "file_owner": null,
+    "file_timestamp": 1744049842.0,
     "peers_with_file": [
-      "jamesk1",
       "rizviz"
     ],
     "hasCopy": "no"
   },
-  "836c4a3b5859a54e9ea1bf04c394f2788f3f24eedb6c7c267bf846aff0cad0f7": {
-    "file_name": "KrabbyPattySecretFormula.txt",
-    "file_size": 49,
-    "file_id": "836c4a3b5859a54e9ea1bf04c394f2788f3f24eedb6c7c267bf846aff0cad0f7",
-    "file_owner": "rizviz",
-    "file_timestamp": 1744160333,
-    "peers": [
-      "rizviz",
-      "jamesk1"
-    ],
+  "d980cddb634947106a82e8394e6c4740b6a4ae357e5b1478bbe8eeb204d06683": {
+    "file_name": "a3test.txt",
+    "file_size": 9,
+    "file_id": "d980cddb634947106a82e8394e6c4740b6a4ae357e5b1478bbe8eeb204d06683",
+    "file_owner": null,
+    "file_timestamp": 1744175324.0,
     "peers_with_file": [
-      "jamesk1"
+      "rizviz"
     ],
     "hasCopy": "no"
   },
-  "9bed6fbcb438bb3a406bfd73c06ae536f18b3f042a0f03f007210bb609cdc43f": {
-    "file_name": "test.txt",
-    "file_size": 13,
-    "file_id": "9bed6fbcb438bb3a406bfd73c06ae536f18b3f042a0f03f007210bb609cdc43f",
-    "file_owner": "rizviz",
-    "file_timestamp": 1744160616,
-    "peers": [
-      "rizviz",
-      "jamesk1"
-    ],
+  "63706eb7f7508bc5e20d5bab216e7c482e1b69cad058da0933e93b81a654c1ce": {
+    "file_name": "We should be sleeping.txt",
+    "file_size": 0.009187698364257812,
+    "file_id": "63706eb7f7508bc5e20d5bab216e7c482e1b69cad058da0933e93b81a654c1ce",
+    "file_owner": "Shivam",
+    "file_timestamp": 1744175504.7543814,
+    "peers_with_file": [],
+    "hasCopy": "no"
+  },
+  "8793adf34e106d5b5e3b8a55262f5310caefe61441b99c06179f5cebf00228df": {
+    "file_name": "KrabbyPattySecretFormula.txt",
+    "file_size": 4.673004150390625e-05,
+    "file_id": "8793adf34e106d5b5e3b8a55262f5310caefe61441b99c06179f5cebf00228df",
+    "file_owner": "nguye89",
+    "file_timestamp": 1744057384,
     "peers_with_file": [
-      "jamesk1"
+      "sbedi",
+      "Grebe",
+      "Silicon"
+    ],
+    "hasCopy": "no"
+  },
+  "713c4424ec89edb1da5ac8dc9dacaf0fa1478cab1857ec7c6198b9f0921583a0": {
+    "file_name": "a3test.txt",
+    "file_size": 9,
+    "file_id": "713c4424ec89edb1da5ac8dc9dacaf0fa1478cab1857ec7c6198b9f0921583a0",
+    "file_owner": "pujarias",
+    "file_timestamp": 1744167785,
+    "peers_with_file": [
+      "sbedi",
+      "Silicon"
+    ],
+    "hasCopy": "no"
+  },
+  "0da6a7bb0040dea9fa492f06602e2ddd6352df93ba967ee28844217df82eb50a": {
+    "file_name": "a3test.txt",
+    "file_size": 9,
+    "file_id": "0da6a7bb0040dea9fa492f06602e2ddd6352df93ba967ee28844217df82eb50a",
+    "file_owner": "pujarias",
+    "file_timestamp": 1744168091,
+    "peers_with_file": [
+      "sbedi",
+      "Silicon"
     ],
     "hasCopy": "no"
   },
@@ -310,64 +252,8 @@
     "file_id": "ad589f37ddfcc093dc7ce6dc626f93ac8ee5fac9ac4a1a5e946cf1afe21610a0",
     "file_owner": "jamesk1",
     "file_timestamp": 1744132987,
-    "peers": [
-      "sbedi",
-      "jamesk1",
-      "Eagle",
-      "patelhs",
-      "sanons"
-    ],
     "peers_with_file": [
-      "jamesk1",
-      "Eagle",
       "sbedi"
-    ],
-    "hasCopy": "no"
-  },
-  "cf4d4b22096da88ef31041db608ab70bdd34c80ab6e7ee5cfdff31dd4e5f089d": {
-    "file_name": "jamesk1.txt",
-    "file_size": 9,
-    "file_id": "cf4d4b22096da88ef31041db608ab70bdd34c80ab6e7ee5cfdff31dd4e5f089d",
-    "file_owner": "jamesk1",
-    "file_timestamp": 1744134338,
-    "peers": [
-      "sbedi",
-      "jamesk1",
-      "Grebe",
-      "sanons"
-    ],
-    "peers_with_file": [
-      "jamesk1",
-      "sbedi",
-      "Grebe"
-    ],
-    "hasCopy": "no"
-  },
-  "5750a28b553b9e4b3165391d18a7619154eae9feb35ab950ee6d61e6c0acb515": {
-    "file_name": "vid.mp4",
-    "file_size": 1.0050649642944336,
-    "file_id": "5750a28b553b9e4b3165391d18a7619154eae9feb35ab950ee6d61e6c0acb515",
-    "file_owner": "patelhs",
-    "file_timestamp": 1744160691,
-    "peers": [
-      "patelhs"
-    ],
-    "peers_with_file": [
-      "jamesk1"
-    ],
-    "hasCopy": "no"
-  },
-  "505d8e7c94e1e1d5d8c80dbc19a1ae4813a68f1851e2b9db9ae6c1da5bf89c29": {
-    "file_name": "names.txt",
-    "file_size": 1483,
-    "file_id": "505d8e7c94e1e1d5d8c80dbc19a1ae4813a68f1851e2b9db9ae6c1da5bf89c29",
-    "file_owner": "rizviz",
-    "file_timestamp": 1744160720,
-    "peers": [
-      "rizviz"
-    ],
-    "peers_with_file": [
-      "jamesk1"
     ],
     "hasCopy": "no"
   },
@@ -377,182 +263,132 @@
     "file_id": "3841a6b96f9b8fb1f50601b0c742b56f73538d3c71109a506f9be53e53de0d0c",
     "file_owner": "prokopie",
     "file_timestamp": 1744160881,
-    "peers": [
-      "Eagle",
-      "sanons",
+    "peers_with_file": [
+      "sbedi",
+      "testkk"
+    ],
+    "hasCopy": "no"
+  },
+  "d4f9972b8625935aa4b7d4816197d848e0f27453eb2763606dee0c93c8916d26": {
+    "file_name": "testTextFile.txt",
+    "file_size": 123,
+    "file_id": "d4f9972b8625935aa4b7d4816197d848e0f27453eb2763606dee0c93c8916d26",
+    "file_owner": "prokopie",
+    "file_timestamp": 1744165614,
+    "peers_with_file": [
       "sbedi"
     ],
+    "hasCopy": "no"
+  },
+  "5acda21a06bd0dd3494f9404815b8f81fbe1373238a044be783e2d499e97499c": {
+    "file_name": "sonne.txt",
+    "file_size": 123,
+    "file_id": "5acda21a06bd0dd3494f9404815b8f81fbe1373238a044be783e2d499e97499c",
+    "file_owner": "prokopie",
+    "file_timestamp": 1744168730,
     "peers_with_file": [
-      "jamesk1",
-      "Eagle",
       "sbedi"
     ],
     "hasCopy": "no"
   },
-  "1eced69eaba646fdded8ca758e7afa2b9d12061145beff163127e9fa87d7cdce": {
-    "file_name": "test.txt",
-    "file_size": 13,
-    "file_id": "1eced69eaba646fdded8ca758e7afa2b9d12061145beff163127e9fa87d7cdce",
-    "file_owner": "rizviz",
-    "file_timestamp": 1744160897,
-    "peers": [
-      "rizviz"
-    ],
-    "peers_with_file": [
-      "jamesk1"
-    ],
-    "hasCopy": "no"
-  },
-  "7628514a2aac9aa46e11773af251b73d0cf50c5f3395ea02baf451db28615b89": {
-    "file_name": "united.txt",
-    "file_size": 0,
-    "file_id": "7628514a2aac9aa46e11773af251b73d0cf50c5f3395ea02baf451db28615b89",
-    "file_owner": "kashifm",
-    "file_timestamp": 1744154467,
-    "peers": [
-      "kashifm"
-    ],
-    "peers_with_file": [
-      "jamesk1"
-    ],
-    "hasCopy": "no"
-  },
-  "4dc7f268688bb854774d6a89d221e2f1d2b1b1c328788fac3fc9887b305511ec": {
-    "file_name": "camp.txt",
-    "file_size": 1.71661376953125e-05,
-    "file_id": "4dc7f268688bb854774d6a89d221e2f1d2b1b1c328788fac3fc9887b305511ec",
-    "file_owner": "patelhs",
-    "file_timestamp": 1744161339,
-    "peers": [
-      "patelhs",
-      "Hawk"
-    ],
-    "peers_with_file": [
-      "jamesk1"
-    ],
-    "hasCopy": "no"
-  },
-  "d6f6272a5366bbc55ef0a43c9d72b37cac6910bd2bb4ba6292e0a880355a3d80": {
-    "file_name": "bitcoin.pdf",
-    "file_size": 184292,
-    "file_id": "d6f6272a5366bbc55ef0a43c9d72b37cac6910bd2bb4ba6292e0a880355a3d80",
-    "file_owner": "rizviz",
-    "file_timestamp": 1744162202,
-    "peers": [
-      "rizviz"
-    ],
-    "peers_with_file": [
-      "jamesk1"
-    ],
-    "hasCopy": "no"
-  },
-  "3538ce1977878ea85a9a7736f1581fd8a5ec600d3714a9c8718ddc4c58768cc1": {
-    "file_name": "testfile.txt",
-    "file_size": 28,
-    "file_id": "3538ce1977878ea85a9a7736f1581fd8a5ec600d3714a9c8718ddc4c58768cc1",
-    "file_owner": "rizviz",
-    "file_timestamp": 1744162236,
-    "peers": [
-      "rizviz",
-      "sanons"
-    ],
-    "peers_with_file": [
-      "jamesk1",
-      "rizviz"
-    ],
-    "hasCopy": "no"
-  },
-  "dbafff45cb2a537633938c5a92361074ef832ccece641fb5cab4b9de7e6f2afe": {
-    "file_name": "bitcoin.pdf",
-    "file_size": 184292,
-    "file_id": "dbafff45cb2a537633938c5a92361074ef832ccece641fb5cab4b9de7e6f2afe",
-    "file_owner": "rizviz",
-    "file_timestamp": 1744162316,
-    "peers": [
-      "rizviz"
-    ],
-    "peers_with_file": [
-      "jamesk1"
-    ],
-    "hasCopy": "no"
-  },
-  "a71fe60a67bfd151e08e7e6c4e8ef83161af92a9b06275be2fe2971f5bcc9326": {
-    "file_name": "bitcoin.pdf",
-    "file_size": 184292,
-    "file_id": "a71fe60a67bfd151e08e7e6c4e8ef83161af92a9b06275be2fe2971f5bcc9326",
-    "file_owner": "rizviz",
-    "file_timestamp": 1744162350,
-    "peers": [
-      "rizviz",
-      "sanons"
-    ],
-    "peers_with_file": [
-      "jamesk1",
-      "rizviz"
-    ],
-    "hasCopy": "no"
-  },
-  "328510d719c7f192b41fd848e35c7f42b16788bd40414e8560822f2bceca6806": {
-    "file_name": "KrabbyPattySecretFormula.txt",
-    "file_size": 49,
-    "file_id": "328510d719c7f192b41fd848e35c7f42b16788bd40414e8560822f2bceca6806",
-    "file_owner": "rizviz",
-    "file_timestamp": 1744162405,
-    "peers": [
-      "rizviz",
-      "sanons"
-    ],
-    "peers_with_file": [
-      "jamesk1",
-      "rizviz"
-    ],
-    "hasCopy": "no"
-  },
-  "128421cdf60403b9762f483be3e1a76d04497708a8a6a975b20a83dc4fc47d13": {
-    "file_name": "coolfile.txt",
-    "file_size": 95,
-    "file_id": "128421cdf60403b9762f483be3e1a76d04497708a8a6a975b20a83dc4fc47d13",
-    "file_owner": "rizviz",
-    "file_timestamp": 1744162822,
-    "peers": [
-      "rizviz",
-      "sanons"
-    ],
-    "peers_with_file": [
-      "jamesk1",
-      "rizviz"
-    ],
-    "hasCopy": "no"
-  },
-  "93a011e94184b67bc4ecb610b0088a104e687a32781ef816dc0267b7d66afb1c": {
-    "file_name": "jamesk1.txt",
-    "file_size": 9,
-    "file_id": "93a011e94184b67bc4ecb610b0088a104e687a32781ef816dc0267b7d66afb1c",
-    "file_owner": "rizviz",
-    "file_timestamp": 1744164341,
-    "peers_with_file": [
-      "rizviz",
-      "jamesk1"
-    ],
-    "hasCopy": "no"
-  },
-  "fb5ef69d91a9ffe8de26ec4158ce65f9d4998a7bd00aacbadb86c8df718a8b0d": {
+  "d72c43c5ed5834e1467eb90793d131bfb948b7ccd40c9e891c8d3e01675cd20f": {
     "file_name": "saulo-profile-s.jpeg",
     "file_size": 20511,
-    "file_id": "fb5ef69d91a9ffe8de26ec4158ce65f9d4998a7bd00aacbadb86c8df718a8b0d",
-    "file_owner": "rizviz",
-    "file_timestamp": 1744164409,
+    "file_id": "d72c43c5ed5834e1467eb90793d131bfb948b7ccd40c9e891c8d3e01675cd20f",
+    "file_owner": null,
+    "file_timestamp": 1744175520,
+    "peers_with_file": [
+      "rizviz",
+      "kashifm"
+    ],
+    "hasCopy": "yes"
+  },
+  "a72bbdbed32d44d0bd300b9594a65ce7f55e32d5b579b81453a337ff63a3d0c5": {
+    "file_name": "image.png",
+    "file_size": 2311027,
+    "file_id": "a72bbdbed32d44d0bd300b9594a65ce7f55e32d5b579b81453a337ff63a3d0c5",
+    "file_owner": null,
+    "file_timestamp": 1744175464,
     "peers_with_file": [
       "rizviz"
     ],
     "hasCopy": "no"
   },
-  "a16fcb2801deeccce77897dae7ed069512a6736be9a7ea4a44ef2df8064ed1cf": {
-    "file_name": "testfile.txt",
-    "file_size": 28,
-    "file_id": "a16fcb2801deeccce77897dae7ed069512a6736be9a7ea4a44ef2df8064ed1cf",
-    "file_owner": "rizviz",
-    "file_timestamp": 1744164419,
+  "cf4d4b22096da88ef31041db608ab70bdd34c80ab6e7ee5cfdff31dd4e5f089d": {
+    "file_name": "jamesk1.txt",
+    "file_size": 9,
+    "file_id": "cf4d4b22096da88ef31041db608ab70bdd34c80ab6e7ee5cfdff31dd4e5f089d",
+    "file_owner": "jamesk1",
+    "file_timestamp": 1744134338,
+    "peers_with_file": [
+      "sbedi",
+      "kashifm",
+      "Grebe"
+    ],
+    "hasCopy": "yes"
+  },
+  "546e57385b450cefadcac4469bea3e2eb2beac01e8138b52b402750eb244610a": {
+    "file_name": "arsenal.txt",
+    "file_size": 6928,
+    "file_id": "546e57385b450cefadcac4469bea3e2eb2beac01e8138b52b402750eb244610a",
+    "file_owner": "kashifm",
+    "file_timestamp": 1744175602,
+    "hasCopy": "yes",
+    "peers_with_file": [
+      "kashifm",
+      "sbedi"
+    ]
+  },
+  "952fe62f1779161c438ad11330cce0c3d22444edc454c021da571d8d63a01009": {
+    "file_name": "a3test.txt",
+    "file_size": 9,
+    "file_id": "952fe62f1779161c438ad11330cce0c3d22444edc454c021da571d8d63a01009",
+    "file_owner": null,
+    "file_timestamp": 1744175601,
+    "peers_with_file": [
+      "rizviz"
+    ],
+    "hasCopy": "no"
+  },
+  "81697b269af382059945c3d758f3aedf42f43ef13cb6547318a27a2cee90d422": {
+    "file_name": "files/testMID.gif",
+    "file_size": 1.83,
+    "file_id": "81697b269af382059945c3d758f3aedf42f43ef13cb6547318a27a2cee90d422",
+    "file_owner": "tda",
+    "file_timestamp": 1744167588,
+    "peers_with_file": [
+      "Hawk"
+    ],
+    "hasCopy": "no"
+  },
+  "a9edc6e045b9d9087f36bed6f427721c81177aeea9e3747193fad3cf90f42a3f": {
+    "file_name": "jamesk1.txt",
+    "file_size": 9,
+    "file_id": "a9edc6e045b9d9087f36bed6f427721c81177aeea9e3747193fad3cf90f42a3f",
+    "file_owner": null,
+    "file_timestamp": 1744176030,
+    "peers_with_file": [
+      "rizviz"
+    ],
+    "hasCopy": "no"
+  },
+  "1d70342c93cee54e931715c158dc0ec9efe2bee252ae3fda6ea6f0eed8eb904d": {
+    "file_name": "test.txt",
+    "file_size": 13,
+    "file_id": "1d70342c93cee54e931715c158dc0ec9efe2bee252ae3fda6ea6f0eed8eb904d",
+    "file_owner": null,
+    "file_timestamp": 1744176469,
+    "peers_with_file": [
+      "rizviz"
+    ],
+    "hasCopy": "no"
+  },
+  "273705f27142f54e37277008427f3b51f95924ed55461dc33e1cec8e11567b04": {
+    "file_name": "saulo-profile-s.jpeg",
+    "file_size": 20511,
+    "file_id": "273705f27142f54e37277008427f3b51f95924ed55461dc33e1cec8e11567b04",
+    "file_owner": null,
+    "file_timestamp": 1744176484,
     "peers_with_file": [
       "rizviz"
     ],

@@ -261,6 +261,7 @@ def handle_get_file(conn, file_id):
     except Exception as e:
         print(f"[{peer_id}] Error reading/sending file: {e}")
 
+
 # get metadata of files that have a copy
 def get_gossip_reply_metadata():
     reply_files = []
@@ -277,6 +278,7 @@ def get_gossip_reply_metadata():
             )
     #  print(f"[{peer_id}] GOSSIP_REPLY will include {len(reply_files)} file(s).")
     return reply_files
+
 
 # handle ANNOUNCE message and update the metadata
 def handle_announce(msg):
@@ -301,6 +303,39 @@ def handle_announce(msg):
 
     save_metadata()
     print(f"[{peer_id}] Announced new file '{msg['file_name']}' from {msg['from']}")
+
+
+# handle DELETE message and delete the file locally
+# and update the metadata
+def handle_delete(msg):
+    file_id = msg.get("file_id")
+    sender_id = msg.get("from")
+
+    entry = file_metadata.get(file_id)
+    if not entry:
+        return  # I don’t have this file in metadata
+
+    #  Only process DELETE if it comes from the owner
+    if entry["file_owner"] != sender_id:
+        return  # Ignore unauthorized DELETE request
+
+    #  Step 1: Delete the file from local disk
+    file_path = os.path.join(base_path, entry["file_name"])
+    if entry["hasCopy"] == "yes" and os.path.exists(file_path):
+        try:
+            os.remove(file_path)
+            print(
+                f"[{peer_id}] Deleted file '{entry['file_name']}' due to DELETE from {sender_id}"
+            )
+        except Exception as e:
+            print(f"[{peer_id}] Failed to delete local file: {e}")
+
+    #  Step 2: Update metadata
+    entry["hasCopy"] = "no"
+    if peer_id in entry["peers_with_file"]:
+        entry["peers_with_file"].remove(peer_id)
+
+    save_metadata()
 
 
 # handle FILE_DATA message and save the file locally
@@ -675,6 +710,60 @@ def handle_get_file_cli(file_id):
         print(f"[{peer_id}] Could not retrieve file from any available peer.")
 
 
+# handle DELETE command from CLI
+def handle_delete_command(file_id):
+    entry = file_metadata.get(file_id)
+    if not entry:
+        print(f"[{peer_id}] File ID {file_id} not found in metadata.")
+        return
+
+    if entry["file_owner"] != peer_id:
+        print(f"[{peer_id}] You are not the owner of file ID {file_id}. Cannot delete.")
+        return
+
+    try:
+        # Delete the file from disk if it exists
+        file_path = os.path.join(base_path, entry["file_name"])
+        if os.path.exists(file_path):
+            os.remove(file_path)
+
+        # Update metadata
+        entry["hasCopy"] = "no"
+        if peer_id in entry["peers_with_file"]:
+            entry["peers_with_file"].remove(peer_id)
+
+        save_metadata()
+        print(f"[{peer_id}] Deleted file '{entry['file_name']}' locally.")
+
+        # DELETE message to only peers that have the file (excluding yourself)
+        delete_msg = {
+            "type": "DELETE",
+            "from": peer_id,
+            "file_id": file_id,
+        }
+
+        for pid in entry["peers_with_file"][
+            :
+        ]:  # make a copy to avoid modification issues
+            if pid == peer_id:
+                continue  # skip self
+
+            info = tracked_peers.get(pid)
+            if not info:
+                continue  # skip if no info
+
+            try:
+                with socket.create_connection(
+                    (info["host"], info["port"]), timeout=5
+                ) as sock:
+                    sock.sendall(json.dumps(delete_msg).encode())
+            except:
+                continue  # silently ignore
+
+    except Exception as e:
+        print(f"[{peer_id}] Failed to delete file: {e}")
+
+
 def handle_cli_command(cmd):
     if cmd == "list":
         print(f"[{peer_id}] Listing {len(file_metadata)} file(s):")
@@ -710,6 +799,13 @@ def handle_cli_command(cmd):
             print(f"[{peer_id}] Usage: push <file_path>")
             return
         handle_push_command(tokens[1])
+    elif cmd.startswith("delete "):
+        tokens = cmd.split()
+        if len(tokens) != 2:
+            print(f"[{peer_id}] Usage: delete <file_id>")
+            return
+        handle_delete_command(tokens[1])
+
     else:
         print(f"[{peer_id}] Unknown command: {cmd}")
 
@@ -760,8 +856,8 @@ def generate_stats_page():
                 f"<td>{peers_str}</td></tr>"
             )
         except Exception as e:
-           #  print(f" Error rendering row for {fid}: {e}")
-           pass
+            #  print(f" Error rendering row for {fid}: {e}")
+            pass
     html += "</table>"
 
     html += "</body></html>"

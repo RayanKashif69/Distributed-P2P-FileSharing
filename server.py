@@ -275,7 +275,7 @@ def get_gossip_reply_metadata():
                     "file_timestamp": file["file_timestamp"],
                 }
             )
-    print(f"[{peer_id}] GOSSIP_REPLY will include {len(reply_files)} file(s).")
+   #  print(f"[{peer_id}] GOSSIP_REPLY will include {len(reply_files)} file(s).")
     return reply_files
 
 

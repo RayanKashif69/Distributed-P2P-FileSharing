@@ -718,6 +718,9 @@ def handle_get_file_cli(file_id):
 
 
 def auto_fetch_files_on_startup():
+
+    time.sleep(10)  # Give some time for the network to stabilize
+
     print(f"[{peer_id}] Attempting to auto-fetch 3 files from the network...")
     missing_files = [
         fid

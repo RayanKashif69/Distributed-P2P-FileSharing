@@ -836,7 +836,7 @@ def handle_cli_command(cmd):
     elif cmd == "exit":
         print(f"[{peer_id}] Shutting down peer.")
         save_metadata()
-        sys.exit(0)
+        os._exit(0)
     else:
         print(f"[{peer_id}] Unknown command: {cmd}")
 

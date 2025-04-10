@@ -27,6 +27,8 @@ Upon starting:
 
 Please take note of the following important behaviors and caveats while running my peer:
 
+- ALL message handling AND CLI commands are fully functional, for some messages i have suppressed the message logging but you should be able to see the changes on the stats as soon as the messages are exchanged with other peers. Below are some other notes for you:
+
 - **Initial Auto-Fetch May Appear Slow**  
   Upon startup, my peer automatically attempts to fetch 3–5 files from the network. During this time, it may appear unresponsive. **This is expected behavior.**  
   - The network was heavily loaded during my testing, and this caused delays.
@@ -36,17 +38,17 @@ Please take note of the following important behaviors and caveats while running 
   In some cases, metadata may indicate that a peer has a file, but:
   - The peer doesn't actually have a local copy.
   - The peer becomes unresponsive and times out.  
-  These situations can cause auto-fetch to fail. However, **when fetching from well-known hosts, the process is usually faster and more reliable.**
+  These situations can cause auto-fetch to fail. However, **when initial fetching from well-known hosts, the process is usually faster and more reliable (always works).**
 
 - **Console Spam for Debugging**  
   If you notice the terminal being spammed quickly with messages, it's due to debug print statements added for development purposes. These do not impact core functionality.
 
 - **File Download Delay After `get <file_id>`**  
   After issuing a `get <file_id>`, it may take 20–30 seconds to download a file — especially for larger files like `bitcoin.pdf` or `image.png`, or when the network is congested.  
-  - The peer tries multiple sources listed in the metadata and usually retrieves the file from a well-known host.
+  - The peer tries multiple peers listed in the metadata and usually retrieves the file from a good peer(well known hosts)
   - The CLI will show:  
     `Successfully downloaded file from <peer_id>`  
-    once the process completes. Please be patient and monitor the CLI output.
+    once the process completes. Please be patient and monitor the CLI output. You'll see other messages from regossip and announce while the "get" is happening.
 
 - **Browser Stats Page May Lag Behind**  
   The browser stats page may take some time (30s–60s) to reflect updated file and peer information.  
@@ -54,15 +56,16 @@ Please take note of the following important behaviors and caveats while running 
   - **With well-known hosts, updates are usually quicker.**
 
 - **Peer Dropout Handling**  
-  If a peer becomes inactive, my implementation will eventually drop it from the `tracked peers` list and remove it from the `peersWithFile` mappings.  
-  - This cleanup happens after the timeout period.
+  If a peer becomes inactive, my implementation will eventually drop it from the `tracked peers` list and remove it from the `peersWithFile` entry.  
+- This cleanup happens after the timeout period.
+- i have a seperate thread handling the cleanup.
 
 ---
 
 ##  Synchronization Timing
 
 - **How long does it take?**  
-  Metadata synchronization typically takes **20–60 seconds**, depending on network load and the responsiveness of peers.
+  Metadata synchronization typically takes a couple of seconds to happen but in other cases it could take **20–60 seconds**, depending on network load and the responsiveness of peers.
 
 - **How do I know it’s synchronized?**  
   You will:
@@ -75,9 +78,11 @@ Please take note of the following important behaviors and caveats while running 
 
 ##  Metadata Creation and Loading Code
 
-- When a peer starts, it first attempts to load its metadata from a local metadata.json file. If this file exists, the metadata is read and loaded into memory. If it doesn’t, the system scans the local storage directory and creates metadata from scratch. For each file found, it reads the content, calculates its size, fetches the last modified timestamp, and generates a unique file_id using a SHA256 hash of the file’s content and timestamp. This information, along with the peer ID and ownership status, is stored in a metadata dictionary. The metadata is then saved to metadata.json for future use. This ensures that each peer accurately tracks which files it has and can share this information with others in the network.
+- When a peer starts, it first attempts to load its metadata from a local metadata.json file. If this file exists, the metadata is read and loaded into memory. If it doesn’t, the system scans the local storage directory and creates metadata from scratch. 
+- For each file found, it reads the content, calculates its size, fetches the last modified timestamp, and generates a unique file_id using a SHA256 hash of the file’s content and timestamp. This information, along with the peer ID and ownership status, is stored in a metadata dictionary.
+- The metadata is then saved to metadata.json for future use. This ensures that each peer accurately tracks which files it has and can share this information with others in the network.
 
-- storage_<peerid> is the directory where the files and metadata.json are stored 
+- storage_peerid is the directory where the files and metadata.json are stored 
 
 ###  Relevant Functions in `server.py`:
 #### `load_metadata()`

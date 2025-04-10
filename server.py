@@ -736,9 +736,8 @@ def auto_fetch_files_on_startup():
         print(f"[{peer_id}] Auto-fetching file ID: {fid}")
         handle_get_file_cli(fid)
         time.sleep(1)  # small delay between fetches to avoid spamming
-    
-    print(f"[{peer_id}] Auto-fetch process complete.")
 
+    print(f"[{peer_id}] Auto-fetch process complete.")
 
 
 # handle DELETE command from CLI

@@ -95,7 +95,7 @@ Peers that have not been heard from in over **60 seconds** (the defined dropout 
 - **Lines:** 562–585  
 - **Function:** `cleanup_tracked_peers()`
 
-### 📄 Code Summary:
+###  Code Summary:
 The function iterates through `tracked_peers`, checks if each peer’s `last_seen` timestamp exceeds the `PEER_DROP_TIMEOUT`, and:
 - Deletes that peer from the `tracked_peers` dictionary
 - Removes the peer from all `peers_with_file` lists inside `file_metadata`

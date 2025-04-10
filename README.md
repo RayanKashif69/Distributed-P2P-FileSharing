@@ -17,7 +17,7 @@ python3 server.py kashifm eagle.cs.umanitoba.ca 8115 8116
 
 ## What to Expect
 
-##  Notes for Grader / Evaluation Tips
+###  Notes for Grader / Evaluation Tips
 
 - **Initial Auto-Fetch May Appear Slow**  
   Upon startup, my peer automatically attempts to fetch 3–5 files from the network. During this time, it may appear unresponsive. **This is expected behavior.**  

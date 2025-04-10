@@ -73,18 +73,15 @@ Please take note of the following important behaviors and caveats while running 
 
 ---
 
-##  Metadata Synchronization Code
+##  Metadata Creation and Loading Code
 
-- **File:** `server.py`  
-- **Line Number:** Around **line 270**, inside `handle_gossip_reply()`  
+- When a peer starts, it first attempts to load its metadata from a local metadata.json file. If this file exists, the metadata is read and loaded into memory. If it doesn’t, the system scans the local storage directory and creates metadata from scratch. For each file found, it reads the content, calculates its size, fetches the last modified timestamp, and generates a unique file_id using a SHA256 hash of the file’s content and timestamp. This information, along with the peer ID and ownership status, is stored in a metadata dictionary. The metadata is then saved to metadata.json for future use. This ensures that each peer accurately tracks which files it has and can share this information with others in the network.
 
-### Description:
-This function handles incoming `GOSSIP_REPLY` messages. It:
-- Merges new file entries into the local metadata.
-- Updates existing file records, especially the `peersWithFile` set.
-- Ensures each peer’s metadata becomes consistent through repeated gossip.
-
-This is the heart of metadata syncing and is crucial for the functioning of the decentralized protocol.
+###  Relevant Functions in `server.py`:
+#### `load_metadata()`
+#### `scan_storage_folder()`
+#### `save_metadata()`
+#### lines 50 - 101
 
 ---
 

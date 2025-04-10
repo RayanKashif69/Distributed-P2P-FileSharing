@@ -77,6 +77,8 @@ Please take note of the following important behaviors and caveats while running 
 
 - When a peer starts, it first attempts to load its metadata from a local metadata.json file. If this file exists, the metadata is read and loaded into memory. If it doesn’t, the system scans the local storage directory and creates metadata from scratch. For each file found, it reads the content, calculates its size, fetches the last modified timestamp, and generates a unique file_id using a SHA256 hash of the file’s content and timestamp. This information, along with the peer ID and ownership status, is stored in a metadata dictionary. The metadata is then saved to metadata.json for future use. This ensures that each peer accurately tracks which files it has and can share this information with others in the network.
 
+- storage_<peerid> is the directory where the files and metadata.json are stored 
+
 ###  Relevant Functions in `server.py`:
 #### `load_metadata()`
 #### `scan_storage_folder()`

@@ -22,7 +22,7 @@ python3 server.py kashifm eagle.cs.umanitoba.ca 8115 8116
 - **Initial Auto-Fetch May Appear Slow**  
   Upon startup, my peer automatically attempts to fetch 3–5 files from the network. During this time, it may appear unresponsive. **This is expected behavior.**  
   - The network was heavily loaded during my testing, and this caused delays.
-  - **Please wait until you see the `Command Menu` prompt** — that indicates the auto-fetch process has completed and the peer is ready for interaction.
+  - **Please wait until you see the `Command Menu` prompt** and a message saying "Auto Fetch Process Complete" — that indicates the auto-fetch process has completed and the peer is ready for interaction.
 
 - **Auto-Fetch Failures Due to Metadata Mismatch or Timeouts**  
   In some cases, metadata may indicate that a peer has a file, but:

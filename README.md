@@ -23,16 +23,6 @@ Upon starting:
 ---
 
 
-##  Network Behavior
-
-- Peers use **GOSSIP** to discover other peers and synchronize metadata.
-- Upon startup, each peer auto-fetches 3–5 files from the network.
-- After successfully downloading a file, the peer **announces** it to others.
-- Metadata is continuously synced and updated using incoming gossip messages.
-- Peers that don’t respond within 60 seconds are dropped from the list.
-
----
-
 ##  Notes for Grader / Evaluation Tips
 
 Please take note of the following important behaviors and caveats while running my peer:

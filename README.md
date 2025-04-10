@@ -35,7 +35,7 @@ python3 server.py kashifm eagle.cs.umanitoba.ca 8115 8116
 
 - **File Download Delay After `get <file_id>`**  
   After issuing a `get <file_id>`, it may take 20–30 seconds to download a file — especially for larger files like `bitcoin.pdf` or `image.png`, or when the network is congested.  
-  - The peer tries multiple sources listed in the metadata and usually retrieves the file from a well-known host.
+  - The peer tries multiple sources listed in the metadata and usually retrieves the file from one of the trakced peers.
   - The CLI will show:  
     `Successfully downloaded file from <peer_id>`  
     once the process completes. Please be patient and monitor the CLI output.

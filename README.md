@@ -69,6 +69,7 @@ Please take note of the following important behaviors and caveats while running 
   - See the `Command Menu` prompt.
   - Observe file listings and peer info on the stats page.
   - Notice fewer metadata logs, indicating network stabilization.
+  - Once the auto fetch is complete, it should show a message "AUTO FETCH PROCESS COMPLETE"
 
 ---
 

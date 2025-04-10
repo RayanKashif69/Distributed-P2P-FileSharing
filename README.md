@@ -41,9 +41,9 @@ python3 server.py kashifm eagle.cs.umanitoba.ca 8115 8116
     once the process completes. Please be patient and monitor the CLI output.
 
 - **Browser Stats Page May Lag Behind**  
-  The browser stats page may take some time (30s–60s) to reflect updated file and peer information.  
+  The browser stats page may take some time (30s–60s) to reflect updated file and peer information. The browser still refreshes every other second but changes may take their time as gossip replies are exchanged
   - This is due to gossip intervals (30s) and peer timeout windows (60s).
-  - **With well-known hosts, updates are usually quicker.**
+  - **I noticed with With well-known hosts, updates are usually quicker.**
 
 - **Peer Dropout Handling**  
   If a peer becomes inactive, my implementation will eventually drop it from the `tracked peers` list and remove it from the `peersWithFile` mappings.  
